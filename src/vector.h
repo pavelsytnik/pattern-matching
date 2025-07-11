@@ -128,4 +128,34 @@ typedef struct {
     }                                              \
 } while (0)
 
+#define vector_clear(vec) do {                                      \
+    if ((vec)) {                                                    \
+        vector_elem_dtor_ptr elem_dtor__ = vector_elem_dtor((vec)); \
+        if (elem_dtor__) {                                          \
+            size_t size__ = vector_size((vec));                     \
+            for (size_t i__ = 0; i__ < size__; i__++) {             \
+                elem_dtor__(&(vec)[i__]);                           \
+            }                                                       \
+        }                                                           \
+        vector_set_size_((vec), 0);                                 \
+    }                                                               \
+} while (0)
+
+#define vector_free(vec) do {                                       \
+    if ((vec)) {                                                    \
+        void *memory__ = vector_vec_to_meta_((vec));                \
+        vector_elem_dtor_ptr elem_dtor__ = vector_elem_dtor((vec)); \
+                                                                    \
+        if (elem_dtor__) {                                          \
+            size_t size__ = vector_size((vec));                     \
+            for (size_t i__ = 0; i__ < size__; i__++) {             \
+                elem_dtor__(&(vec)[i__]);                           \
+            }                                                       \
+        }                                                           \
+                                                                    \
+        free(memory__);                                             \
+        (vec) = NULL;                                               \
+    }                                                               \
+} while (0)
+
 #endif // vector_h_
