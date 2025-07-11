@@ -9,12 +9,12 @@
 #include <stddef.h>
 #include <stdlib.h>
 
-typedef void (*vector_elem_dtor)(void *elem_ptr);
+typedef void (*vector_elem_dtor_ptr)(void *elem_ptr);
 
 typedef struct {
     size_t capacity;
     size_t size;
-    vector_elem_dtor elem_dtor;
+    vector_elem_dtor_ptr elem_dtor;
 } vector_metadata_;
 
 #define vector_of(type) type *
@@ -110,15 +110,15 @@ typedef struct {
     vector_set_size_((vec), size__ + 1);                            \
 } while (0)
 
-#define vector_pop_back(vec) do {                           \
-    vector_elem_dtor elem_dtor__ = vector_elem_dtor((vec)); \
-    size_t size__ = vector_size((vec));                     \
-                                                            \
-    if (elem_dtor__) {                                      \
-        elem_dtor__(&(vec)[size__ - 1]);                    \
-    }                                                       \
-                                                            \
-    vector_set_size_((vec), size__ - 1);                    \
+#define vector_pop_back(vec) do {                               \
+    vector_elem_dtor_ptr elem_dtor__ = vector_elem_dtor((vec)); \
+    size_t size__ = vector_size((vec));                         \
+                                                                \
+    if (elem_dtor__) {                                          \
+        elem_dtor__(&(vec)[size__ - 1]);                        \
+    }                                                           \
+                                                                \
+    vector_set_size_((vec), size__ - 1);                        \
 } while (0)
 
 #define vector_shrink(vec) do {                    \
