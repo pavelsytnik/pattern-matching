@@ -24,7 +24,7 @@ Type *new_tuple(const Type *const *args, size_t n) {
             return NULL;
         }
 
-        memcpy(args_copy, args, n);
+        memcpy(args_copy, args, n * sizeof(*args));
     }
 
     ty->kind = TK_TUPLE;
@@ -42,7 +42,7 @@ static char *copy_string(const char *s) {
     char *cp = malloc(n);
     if (!cp) return NULL;
 
-    memcpy(cp, s, n);
+    memcpy(cp, s, n * sizeof(*s));
     return cp;
 }
 
@@ -60,7 +60,7 @@ static int copy_variant_constructor(const VariantConstructor *src, VariantConstr
             return 1;
         }
 
-        memcpy(dst->args, src->args, dst->args_n);
+        memcpy(dst->args, src->args, dst->args_n * sizeof(*dst->args));
     }
 
     return 0;
