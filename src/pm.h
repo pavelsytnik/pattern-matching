@@ -1,3 +1,8 @@
+/* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
+ * Copyright (c) 2026 Pavlo Sytnyk.                                      *
+ * Licensed under the MIT License. See LICENSE for license information.  *
+ * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
+
 #ifndef pm__h_
 #define pm__h_
 
