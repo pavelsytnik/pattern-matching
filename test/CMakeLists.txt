@@ -25,3 +25,5 @@ function(add_pm_test name)
         COMMAND "test-${name}"
     )
 endfunction()
+
+add_pm_test(type)
