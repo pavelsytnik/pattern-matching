@@ -5,6 +5,7 @@
 
 #include "pm.h"
 
+#include <stdint.h>
 #include <stdlib.h>
 #include <string.h>
 
@@ -105,4 +106,92 @@ void free_type(Type *ty) {
         }
         free(ty->variant.ctors);
     }
+}
+
+static const VariantConstructor *variant_ctor(const Type *ty, const char *name) {
+    for (size_t i = 0; i < ty->variant.ctors_n; i++) {
+        if (strcmp(ty->variant.ctors[i].name, name) == 0) {
+            return &ty->variant.ctors[i];
+        }
+    }
+    return NULL;
+}
+
+Pattern pt_false(void) {
+    return (Pattern){
+        .kind = PK_CTOR,
+        .ctor = {
+            .ctor = {
+                .kind = CK_FALSE
+            },
+            .args = NULL,
+            .args_n = 0
+        }
+    };
+}
+
+Pattern pt_true(void) {
+    return (Pattern){
+        .kind = PK_CTOR,
+        .ctor = {
+            .ctor = {
+                .kind = CK_TRUE
+            },
+            .args = NULL,
+            .args_n = 0
+        }
+    };
+}
+
+Pattern pt_int(int32_t i) {
+    return (Pattern){
+        .kind = PK_CTOR,
+        .ctor = {
+            .ctor = {
+                .kind = CK_INT,
+                .integer = i
+            },
+            .args = NULL,
+            .args_n = 0
+        }
+    };
+}
+
+Pattern pt_tuple(const Type *ty, Pattern *args) {
+    return (Pattern){
+        .kind = PK_CTOR,
+        .ctor = {
+            .ctor = {
+                .kind = CK_TUPLE,
+                .tuple = {
+                    .args = ty->tuple.args,
+                    .args_n = ty->tuple.args_n
+                }
+            },
+            .args = args,
+            .args_n = ty->tuple.args_n
+        }
+    };
+}
+
+Pattern pt_variant(const Type *ty, const char *name, Pattern *args) {
+    const VariantConstructor *ctor = variant_ctor(ty, name);
+
+    return (Pattern){
+        .kind = PK_CTOR,
+        .ctor = {
+            .ctor = {
+                .kind = CK_VARIANT_CTOR,
+                .variant_ctor = ctor
+            },
+            .args = args,
+            .args_n = ctor->args_n
+        }
+    };
+}
+
+Pattern pt_wildcard(void) {
+    return (Pattern){
+        .kind = PK_WILDCARD
+    };
 }
