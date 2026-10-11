@@ -58,8 +58,7 @@ static void test_int_bool_tuple_pattern(void) {
     });
 
     assert_ctor_pattern(&pt, CK_TUPLE, 2);
-    assert(pt.ctor.ctor.tuple.args == int_bool_tuple->tuple.args);
-    assert(pt.ctor.ctor.tuple.args_n == int_bool_tuple->tuple.args_n);
+    assert(pt.ctor.ctor.tuple == &int_bool_tuple->tuple);
 
     assert_int_pattern(&pt.ctor.args[0], 123);
     assert_true_pattern(&pt.ctor.args[1]);

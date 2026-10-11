@@ -163,10 +163,7 @@ Pattern pt_tuple(const Type *ty, Pattern *args) {
         .ctor = {
             .ctor = {
                 .kind = CK_TUPLE,
-                .tuple = {
-                    .args = ty->tuple.args,
-                    .args_n = ty->tuple.args_n
-                }
+                .tuple = &ty->tuple
             },
             .args = args,
             .args_n = ty->tuple.args_n

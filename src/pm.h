@@ -14,6 +14,7 @@ typedef enum ConstructorKind ConstructorKind;
 typedef enum PatternKind PatternKind;
 
 typedef struct Type Type;
+typedef struct TupleConstructor TupleConstructor;
 typedef struct VariantConstructor VariantConstructor;
 typedef struct Constructor Constructor;
 typedef struct Pattern Pattern;
@@ -38,6 +39,11 @@ enum PatternKind {
     PK_WILDCARD
 };
 
+struct TupleConstructor {
+    const Type **args;
+    size_t args_n;
+};
+
 struct VariantConstructor {
     char *name;
     const Type **args;
@@ -48,10 +54,7 @@ struct Type {
     TypeKind kind;
 
     union {
-        struct {
-            const Type **args;
-            size_t args_n;
-        } tuple;
+        TupleConstructor tuple;
 
         struct {
             VariantConstructor *ctors;
@@ -65,10 +68,7 @@ struct Constructor {
 
     union {
         int32_t integer;
-        struct {
-            const Type *const *args;
-            size_t args_n;
-        } tuple;
+        const TupleConstructor *tuple;
         const VariantConstructor *variant_ctor;
     };
 };
