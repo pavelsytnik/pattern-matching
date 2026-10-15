@@ -68,8 +68,11 @@ struct Constructor {
 
     union {
         int32_t integer;
-        const TupleConstructor *tuple;
-        const VariantConstructor *variant_ctor;
+        const Type *tuple;
+        struct {
+            const Type *type;
+            size_t ctor_idx;
+        } variant;
     };
 };
 

@@ -108,13 +108,13 @@ void free_type(Type *ty) {
     }
 }
 
-static const VariantConstructor *variant_ctor(const Type *ty, const char *name) {
+static size_t variant_ctor_idx(const Type *ty, const char *name) {
     for (size_t i = 0; i < ty->variant.ctors_n; i++) {
         if (strcmp(ty->variant.ctors[i].name, name) == 0) {
-            return &ty->variant.ctors[i];
+            return i;
         }
     }
-    return NULL;
+    return (size_t)-1;
 }
 
 Pattern pt_false(void) {
@@ -163,7 +163,7 @@ Pattern pt_tuple(const Type *ty, Pattern *args) {
         .ctor = {
             .ctor = {
                 .kind = CK_TUPLE,
-                .tuple = &ty->tuple
+                .tuple = ty
             },
             .args = args,
             .args_n = ty->tuple.args_n
@@ -172,17 +172,20 @@ Pattern pt_tuple(const Type *ty, Pattern *args) {
 }
 
 Pattern pt_variant(const Type *ty, const char *name, Pattern *args) {
-    const VariantConstructor *ctor = variant_ctor(ty, name);
+    size_t ctor_idx = variant_ctor_idx(ty, name);
 
     return (Pattern){
         .kind = PK_CTOR,
         .ctor = {
             .ctor = {
                 .kind = CK_VARIANT_CTOR,
-                .variant_ctor = ctor
+                .variant = {
+                    .type = ty,
+                    .ctor_idx = ctor_idx
+                }
             },
             .args = args,
-            .args_n = ctor->args_n
+            .args_n = ty->variant.ctors[ctor_idx].args_n
         }
     };
 }

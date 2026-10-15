@@ -58,7 +58,7 @@ static void test_int_bool_tuple_pattern(void) {
     });
 
     assert_ctor_pattern(&pt, CK_TUPLE, 2);
-    assert(pt.ctor.ctor.tuple == &int_bool_tuple->tuple);
+    assert(pt.ctor.ctor.tuple == int_bool_tuple);
 
     assert_int_pattern(&pt.ctor.args[0], 123);
     assert_true_pattern(&pt.ctor.args[1]);
@@ -82,7 +82,8 @@ static void test_result_variant_pattern(void) {
     });
 
     assert_ctor_pattern(&ok_pt, CK_VARIANT_CTOR, 1);
-    assert(ok_pt.ctor.ctor.variant_ctor == &result_type->variant.ctors[0]);
+    assert(ok_pt.ctor.ctor.variant.type == result_type);
+    assert(ok_pt.ctor.ctor.variant.ctor_idx == 0);
 
     const Pattern *tuple_pt = &ok_pt.ctor.args[0];
 
