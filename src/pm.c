@@ -178,7 +178,7 @@ Pattern pt_variant(const Type *ty, const char *name, Pattern *args) {
         .kind = PK_CTOR,
         .ctor = {
             .ctor = {
-                .kind = CK_VARIANT_CTOR,
+                .kind = CK_VARIANT,
                 .variant = {
                     .type = ty,
                     .ctor_idx = ctor_idx

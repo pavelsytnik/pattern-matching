@@ -81,7 +81,7 @@ static void test_result_variant_pattern(void) {
         })
     });
 
-    assert_ctor_pattern(&ok_pt, CK_VARIANT_CTOR, 1);
+    assert_ctor_pattern(&ok_pt, CK_VARIANT, 1);
     assert(ok_pt.ctor.ctor.variant.type == result_type);
     assert(ok_pt.ctor.ctor.variant.ctor_idx == 0);
 

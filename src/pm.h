@@ -31,7 +31,7 @@ enum ConstructorKind {
     CK_TRUE,
     CK_INT,
     CK_TUPLE,
-    CK_VARIANT_CTOR
+    CK_VARIANT
 };
 
 enum PatternKind {
