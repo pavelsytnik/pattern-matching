@@ -1,0 +1,119 @@
+/* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
+ * Copyright (c) 2026 Pavlo Sytnyk.                                      *
+ * Licensed under the MIT License. See LICENSE for license information.  *
+ * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
+
+#ifndef template__vec__h_
+#define template__vec__h_
+
+#include <stdbool.h>
+#include <stdlib.h>
+#include <string.h>
+
+#define VEC_SHRUNK_SIZE_ ((size_t)-1)
+
+#define DEFINE_VEC_(SELF, TYPE)     \
+    typedef TYPE SELF##_value_type; \
+    typedef struct SELF {           \
+        SELF##_value_type *data;    \
+        size_t size;                \
+        size_t capacity;            \
+    } SELF
+
+#endif // template__vec__h_
+
+#include "begin.h"
+
+DEFINE_TYPE(DEFINE_VEC_, Self, ValueType);
+
+static inline size_t MEMB(_size)(const Self *self) {
+    return self->size;
+}
+
+static inline size_t MEMB(_capacity)(const Self *self) {
+    return self->capacity;
+}
+
+static inline bool MEMB(_is_empty)(const Self *self) {
+    return self->size == 0;
+}
+
+static inline void MEMB(_clear)(Self *self) {
+    for (size_t i = 0; i < self->size; i++) {
+        value_free(self->data + i);
+    }
+    self->size = 0;
+}
+
+static inline bool MEMB(_reserve)(Self *self, size_t cap) {
+    if (cap <= self->capacity) return true;
+
+    size_t n = (cap == VEC_SHRUNK_SIZE_) ? self->size : cap;
+
+    SelfValue *d = (SelfValue *)realloc(self->data, n * sizeof(*self->data));
+    if (!d) return false;
+
+    self->data = d;
+    self->capacity = n;
+    return true;
+}
+
+static inline SelfValue *MEMB(_push)(Self *self, SelfValue val) {
+    if (self->size == self->capacity) {
+        size_t n = (self->capacity == 0) ? 8 : self->capacity * 2;
+
+        if (!MEMB(_reserve)(self, n)) return NULL;
+    }
+
+    SelfValue *v = self->data + self->size++;
+    *v = val;
+
+    return v;
+}
+
+static inline void MEMB(_pop)(Self *self) {
+    SelfValue *v = &self->data[--self->size];
+    value_free(v);
+}
+
+static inline void MEMB(_erase)(Self *self, size_t idx, size_t len) {
+    SelfValue *d = self->data + idx;
+    SelfValue *p = d;
+    SelfValue *end = self->data + self->size;
+
+    for (size_t i = 0; i < len; i++) {
+        value_free(p++);
+    }
+
+    memmove(d, p, (end - p) * sizeof(*self->data));
+    self->size -= len;
+}
+
+static inline void MEMB(_shrink_to_fit)(Self *self) {
+    MEMB(_reserve)(self, VEC_SHRUNK_SIZE_);
+}
+
+static inline bool MEMB(_insert)(Self *self, size_t idx, char *const *arr, size_t n) {
+    if (self->size + n > self->capacity && !MEMB(_reserve)(self, self->size + n)) {
+        return false;
+    }
+
+    SelfValue *pos = self->data + idx;
+
+    memmove(pos + n, pos, (self->size - idx) * sizeof(*pos));
+    memcpy(pos, arr, n * sizeof(*pos));
+
+    self->size += n;
+
+    return true;
+}
+
+static inline const SelfValue *MEMB(_at)(const Self *self, size_t idx) {
+    return self->data + idx;
+}
+
+static inline SelfValue *MEMB(_at_mut)(Self *self, size_t idx) {
+    return self->data + idx;
+}
+
+#include "end.h"
