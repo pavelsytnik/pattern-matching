@@ -32,3 +32,4 @@ endfunction()
 
 add_pm_test(type)
 add_pm_test(pattern)
+add_pm_test(preproc)
