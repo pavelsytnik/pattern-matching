@@ -10,21 +10,18 @@
 #include <stdlib.h>
 #include <string.h>
 
-#define VEC_SHRUNK_SIZE_ ((size_t)-1)
+#include "types.h"
 
-#define DEFINE_VEC_(SELF, TYPE)     \
-    typedef TYPE SELF##_value_type; \
-    typedef struct SELF {           \
-        SELF##_value_type *data;    \
-        size_t size;                \
-        size_t capacity;            \
-    } SELF
+#define VEC_SHRUNK_SIZE_ ((size_t)-1)
 
 #endif // template__vec__h_
 
 #include "begin.h"
 
-DEFINE_TYPE(DEFINE_VEC_, Self, ValueType);
+#ifndef DECLARED
+  DEFINE_TYPE(DECLARE_VEC, Self, ValueType);
+#endif
+#undef DECLARED
 
 static inline size_t MEMB(_size)(const Self *self) {
     return self->size;

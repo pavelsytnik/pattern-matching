@@ -4,6 +4,7 @@ add_library(pm STATIC
     ${PROJECT_SOURCE_DIR}/src/template/begin.h
     ${PROJECT_SOURCE_DIR}/src/template/end.h
     ${PROJECT_SOURCE_DIR}/src/template/preproc.h
+    ${PROJECT_SOURCE_DIR}/src/template/types.h
     ${PROJECT_SOURCE_DIR}/src/template/vec.h
 )
 
