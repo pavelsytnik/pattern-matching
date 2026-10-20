@@ -50,8 +50,14 @@ static inline bool MEMB(_reserve)(Self *self, size_t cap) {
 
     size_t n = (cap == VEC_SHRUNK_SIZE_) ? self->size : cap;
 
-    SelfValue *d = (SelfValue *)realloc(self->data, n * sizeof(*self->data));
-    if (!d) return false;
+    SelfValue *d;
+    if (n == 0) {
+        d = NULL;
+        free(self->data);
+    } else {
+        d = (SelfValue *)realloc(self->data, n * sizeof(*self->data));
+        if (!d) return false;
+    }
 
     self->data = d;
     self->capacity = n;
@@ -94,8 +100,12 @@ static inline void MEMB(_shrink_to_fit)(Self *self) {
 }
 
 static inline bool MEMB(_insert)(Self *self, size_t idx, char *const *arr, size_t n) {
-    if (self->size + n > self->capacity && !MEMB(_reserve)(self, self->size + n)) {
-        return false;
+    if (self->size + n > self->capacity) {
+        size_t standard_cap = (self->capacity == 0) ? 8 : self->capacity * 2;
+        size_t min_req_cap = self->size + n;
+        size_t cap = (standard_cap > min_req_cap) ? standard_cap : min_req_cap;
+
+        if (!MEMB(_reserve)(self, cap)) return false;
     }
 
     SelfValue *pos = self->data + idx;
