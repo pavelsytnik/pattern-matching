@@ -94,6 +94,14 @@ static void test_vec_str(void) {
     vec_str_shrink_to_fit(&v);
     assert(vec_str_capacity(&v) == 0);
 
+    // Drop
+    vec_str_push(&v, str("."));
+    vec_str_drop(&v);
+
+    assert(vec_str_size(&v) == 0);
+    assert(vec_str_capacity(&v) == 0);
+    assert(vec_str_is_empty(&v));
+
     // All memory has been freed
     assert(s_str_created_count == s_str_freed_count);
 }

@@ -45,6 +45,14 @@ static inline void MEMB(_clear)(Self *self) {
     self->size = 0;
 }
 
+static inline void MEMB(_drop)(Self *self) {
+    MEMB(_clear)(self);
+    free(self->data);
+
+    self->capacity = 0;
+    self->data = NULL;
+}
+
 static inline bool MEMB(_reserve)(Self *self, size_t cap) {
     if (cap <= self->capacity) return true;
 
