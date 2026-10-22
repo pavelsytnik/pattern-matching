@@ -94,8 +94,14 @@ static void test_vec_str(void) {
     vec_str_shrink_to_fit(&v);
     assert(vec_str_capacity(&v) == 0);
 
+    // Vector from an array
+    const vec_str_value_type strs[] = { str("1"), str("2"), str("3") };
+    v = vec_str_from(strs, sizeof(strs) / sizeof(*strs));
+
+    assert(vec_str_size(&v) == 3);
+    assert(vec_str_capacity(&v) == 3);
+
     // Drop
-    vec_str_push(&v, str("."));
     vec_str_drop(&v);
 
     assert(vec_str_size(&v) == 0);

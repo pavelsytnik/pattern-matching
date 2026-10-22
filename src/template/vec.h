@@ -69,6 +69,15 @@ static inline bool MEMB(_reserve)(Self *self, size_t cap) {
     return true;
 }
 
+static inline Self MEMB(_from)(const SelfValue *arr, size_t n) {
+    Self out = {0};
+    if (!MEMB(_reserve)(&out, n)) return out;
+
+    memcpy(out.data, arr, n * sizeof(*arr));
+    out.size = n;
+    return out;
+}
+
 static inline SelfValue *MEMB(_push)(Self *self, SelfValue val) {
     if (self->size == self->capacity) {
         size_t n = (self->capacity == 0) ? 8 : self->capacity * 2;
