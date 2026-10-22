@@ -104,7 +104,7 @@ static inline void MEMB(_shrink_to_fit)(Self *self) {
     MEMB(_reserve)(self, VEC_SHRUNK_SIZE_);
 }
 
-static inline bool MEMB(_insert)(Self *self, size_t idx, char *const *arr, size_t n) {
+static inline bool MEMB(_insert)(Self *self, size_t idx, const SelfValue *arr, size_t n) {
     if (self->size + n > self->capacity) {
         size_t standard_cap = (self->capacity == 0) ? 8 : self->capacity * 2;
         size_t min_req_cap = self->size + n;
