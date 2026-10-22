@@ -3,6 +3,8 @@
 #include <stdlib.h>
 #include <string.h>
 
+#include <template/types.h>
+
 static size_t s_str_created_count = 0;
 static size_t s_str_freed_count = 0;
 
@@ -95,8 +97,7 @@ static void test_vec_str(void) {
     assert(vec_str_capacity(&v) == 0);
 
     // Vector from an array
-    const vec_str_value_type strs[] = { str("1"), str("2"), str("3") };
-    v = vec_str_from(strs, sizeof(strs) / sizeof(*strs));
+    v = MAKE(vec_str, { str("1"), str("2"), str("3") });
 
     assert(vec_str_size(&v) == 3);
     assert(vec_str_capacity(&v) == 3);
