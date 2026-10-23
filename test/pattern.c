@@ -32,16 +32,19 @@ static void assert_wildcard_pattern(const Pattern *pt) {
 static void test_false_pattern(void) {
     Pattern pt = pt_false();
     assert_false_pattern(&pt);
+    pt_drop(&pt);
 }
 
 static void test_true_pattern(void) {
     Pattern pt = pt_true();
     assert_true_pattern(&pt);
+    pt_drop(&pt);
 }
 
 static void test_int_pattern(void) {
     Pattern pt = pt_int(13);
     assert_int_pattern(&pt, 13);
+    pt_drop(&pt);
 }
 
 static void test_int_bool_tuple_pattern(void) {
@@ -63,6 +66,7 @@ static void test_int_bool_tuple_pattern(void) {
     assert_int_pattern(vec_pattern_at(&pt.ctor.args, 0), 123);
     assert_true_pattern(vec_pattern_at(&pt.ctor.args, 1));
 
+    pt_drop(&pt);
     compiler_drop(&comp);
 }
 
@@ -99,12 +103,14 @@ static void test_result_variant_pattern(void) {
 
     // TODO: Test the `Err` constructor.
 
+    pt_drop(&ok_pt);
     compiler_drop(&comp);
 }
 
 static void test_wildcard_pattern(void) {
     Pattern pt = pt_wildcard();
     assert_wildcard_pattern(&pt);
+    pt_drop(&pt);
 }
 
 int main(void) {

@@ -108,7 +108,10 @@ void free_variant_ctor(VariantConstructor *ctor);
 #define T vec_variant, VariantConstructor
 #include "template/vec.h"
 
+void pt_drop(Pattern *pt);
+
 #define DECLARED
+#define value_free pt_drop
 #define T vec_pattern, Pattern
 #include "template/vec.h"
 

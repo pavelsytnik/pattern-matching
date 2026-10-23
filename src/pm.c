@@ -152,6 +152,17 @@ Pattern pt_wildcard(void) {
     };
 }
 
+void pt_drop(Pattern *pt) {
+    if (pt->kind != PK_CTOR) return;
+
+    switch (pt->ctor.of.kind) {
+    case CK_TUPLE:
+    case CK_VARIANT:
+        vec_pattern_drop(&pt->ctor.args);
+        break;
+    }
+}
+
 Compiler compiler_new(void) {
     return (Compiler){
         .types = vec_type_init()
