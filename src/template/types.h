@@ -11,8 +11,8 @@
 
 #define MAKE(C, ...)                               \
     C##_from(                                      \
-        MAKE_ARRAY(C##_value_type, __VA_ARGS__),   \
-        LITERAL_COUNT(C##_value_type, __VA_ARGS__) \
+        MAKE_ARRAY(C##_raw_type, __VA_ARGS__),   \
+        LITERAL_COUNT(C##_raw_type, __VA_ARGS__) \
     )
 
 #define DECLARE_VEC(SELF, TYPE)     \
