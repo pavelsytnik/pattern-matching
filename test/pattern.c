@@ -4,17 +4,12 @@
 #include <string.h>
 
 #include <pm.h>
+#include <template/types.h>
 
 static void assert_ctor_pattern(const Pattern *pt, ConstructorKind ctor_kind, size_t args_n) {
     assert(pt->kind == PK_CTOR);
-    assert(pt->ctor.ctor.kind == ctor_kind);
-    assert(pt->ctor.args_n == args_n);
-
-    if (pt->ctor.args_n == 0) {
-        assert(pt->ctor.args == NULL);
-    } else {
-        assert(pt->ctor.args != NULL);
-    }
+    assert(pt->ctor.of.kind == ctor_kind);
+    assert(vec_pattern_size(&pt->ctor.args) == args_n);
 }
 
 static void assert_false_pattern(const Pattern *pt) {
@@ -27,7 +22,7 @@ static void assert_true_pattern(const Pattern *pt) {
 
 static void assert_int_pattern(const Pattern *pt, int32_t i) {
     assert_ctor_pattern(pt, CK_INT, 0);
-    assert(pt->ctor.ctor.integer == i);
+    assert(pt->ctor.of.integer == i);
 }
 
 static void assert_wildcard_pattern(const Pattern *pt) {
@@ -50,46 +45,46 @@ static void test_int_pattern(void) {
 }
 
 static void test_int_bool_tuple_pattern(void) {
-    Type *int_bool_tuple = new_tuple((const Type * []){ty_int, ty_bool}, 2);
+    Type *int_bool_tuple = new_tuple(MAKE(vec_typeid, {ty_int, ty_bool}));
 
-    Pattern pt = pt_tuple(int_bool_tuple, (Pattern []){
+    Pattern pt = pt_tuple(int_bool_tuple, MAKE(vec_pattern, {
         pt_int(123),
         pt_true()
-    });
+    }));
 
     assert_ctor_pattern(&pt, CK_TUPLE, 2);
-    assert(pt.ctor.ctor.tuple == int_bool_tuple);
+    assert(pt.ctor.of.tuple == int_bool_tuple);
 
-    assert_int_pattern(&pt.ctor.args[0], 123);
-    assert_true_pattern(&pt.ctor.args[1]);
+    assert_int_pattern(vec_pattern_at(&pt.ctor.args, 0), 123);
+    assert_true_pattern(vec_pattern_at(&pt.ctor.args, 1));
 
     free_type(int_bool_tuple);
 }
 
 static void test_result_variant_pattern(void) {
-    Type *int_int_tuple = new_tuple((const Type * []){ty_int, ty_int}, 2);
+    Type *int_int_tuple = new_tuple(MAKE(vec_typeid, {ty_int, ty_int}));
 
-    Type *result_type = new_variant((VariantConstructor []){
-        {"Ok",  (const Type * []){int_int_tuple}, 1},
-        {"Err", (const Type * []){ty_int},        1}
-    }, 2);
+    Type *result_type = new_variant(MAKE(vec_variant, {
+        {"Ok",  MAKE(vec_typeid, {int_int_tuple})},
+        {"Err", MAKE(vec_typeid, {ty_int})}
+    }));
 
-    Pattern ok_pt = pt_variant(result_type, "Ok", (Pattern []){
-        pt_tuple(int_int_tuple, (Pattern []){
+    Pattern ok_pt = pt_variant(result_type, "Ok", MAKE(vec_pattern, {
+        pt_tuple(int_int_tuple, MAKE(vec_pattern, {
             pt_wildcard(),
             pt_int(88)
-        })
-    });
+        }))
+    }));
 
     assert_ctor_pattern(&ok_pt, CK_VARIANT, 1);
-    assert(ok_pt.ctor.ctor.variant.type == result_type);
-    assert(ok_pt.ctor.ctor.variant.ctor_idx == 0);
+    assert(ok_pt.ctor.of.variant.type == result_type);
+    assert(ok_pt.ctor.of.variant.ctor_idx == 0);
 
-    const Pattern *tuple_pt = &ok_pt.ctor.args[0];
+    const Pattern *tuple_pt = vec_pattern_at(&ok_pt.ctor.args, 0);
 
     assert_ctor_pattern(tuple_pt, CK_TUPLE, 2);
-    assert_wildcard_pattern(&tuple_pt->ctor.args[0]);
-    assert_int_pattern(&tuple_pt->ctor.args[1], 88);
+    assert_wildcard_pattern(vec_pattern_at(&tuple_pt->ctor.args, 0));
+    assert_int_pattern(vec_pattern_at(&tuple_pt->ctor.args, 1), 88);
 
     // TODO: Test the `Err` constructor.
 

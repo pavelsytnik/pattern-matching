@@ -9,15 +9,20 @@
 #include <stddef.h>
 #include <stdint.h>
 
+#include "template/types.h"
+
 typedef enum TypeKind TypeKind;
 typedef enum ConstructorKind ConstructorKind;
 typedef enum PatternKind PatternKind;
 
 typedef struct Type Type;
-typedef struct TupleConstructor TupleConstructor;
 typedef struct VariantConstructor VariantConstructor;
 typedef struct Constructor Constructor;
 typedef struct Pattern Pattern;
+
+DECLARE_VEC(vec_typeid, const Type *);
+DECLARE_VEC(vec_variant, VariantConstructor);
+DECLARE_VEC(vec_pattern, Pattern);
 
 enum TypeKind {
     TK_BOOL,
@@ -39,27 +44,17 @@ enum PatternKind {
     PK_WILDCARD
 };
 
-struct TupleConstructor {
-    const Type **args;
-    size_t args_n;
-};
-
 struct VariantConstructor {
     char *name;
-    const Type **args;
-    size_t args_n;
+    vec_typeid args;
 };
 
 struct Type {
     TypeKind kind;
 
     union {
-        TupleConstructor tuple;
-
-        struct {
-            VariantConstructor *ctors;
-            size_t ctors_n;
-        } variant;
+        vec_typeid tuple;
+        vec_variant variant;
     };
 };
 
@@ -81,26 +76,42 @@ struct Pattern {
 
     union {
         struct {
-            Constructor ctor;
-            Pattern *args;
-            size_t args_n;
+            Constructor of;
+            vec_pattern args;
         } ctor;
     };
 };
 
+#define DECLARED
+#define T vec_typeid, const Type *
+#include "template/vec.h"
+
+VariantConstructor variant_ctor(VariantConstructor ctor);
+void free_variant_ctor(VariantConstructor *ctor);
+
+#define DECLARED
+#define value_from variant_ctor
+#define value_free free_variant_ctor
+#define T vec_variant, VariantConstructor
+#include "template/vec.h"
+
+#define DECLARED
+#define T vec_pattern, Pattern
+#include "template/vec.h"
+
 extern const Type *const ty_bool;
 extern const Type *const ty_int;
 
-Type *new_tuple(const Type *const *args, size_t n);
-Type *new_variant(const VariantConstructor *ctors, size_t n);
+Type *new_tuple(vec_typeid args);
+Type *new_variant(vec_variant ctors);
 
 void free_type(Type *ty);
 
 Pattern pt_false(void);
 Pattern pt_true(void);
 Pattern pt_int(int32_t i);
-Pattern pt_tuple(const Type *ty, Pattern *args);
-Pattern pt_variant(const Type *ty, const char *name, Pattern *args);
+Pattern pt_tuple(const Type *ty, vec_pattern args);
+Pattern pt_variant(const Type *ty, const char *name, vec_pattern args);
 Pattern pt_wildcard(void);
 
 #endif // pm__h_
