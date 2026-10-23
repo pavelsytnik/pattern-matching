@@ -9,17 +9,30 @@
 #include <stdlib.h>
 #include <string.h>
 
-const Type *const ty_bool = &(const Type){TK_BOOL};
-const Type *const ty_int = &(const Type){TK_INT};
+Type ty_bool(void) {
+    return (Type){
+        .kind = TK_BOOL
+    };
+}
 
-Type *new_tuple(vec_typeid args) {
-    Type *ty = malloc(sizeof(Type));
-    if (!ty) return NULL;
+Type ty_int(void) {
+    return (Type){
+        .kind = TK_INT
+    };
+}
 
-    ty->kind = TK_TUPLE;
-    ty->tuple = args;
+Type ty_tuple(vec_typeid args) {
+    return (Type){
+        .kind = TK_TUPLE,
+        .tuple = args
+    };
+}
 
-    return ty;
+Type ty_variant(vec_variant ctors) {
+    return (Type){
+        .kind = TK_VARIANT,
+        .variant = ctors
+    };
 }
 
 static char *copy_string(const char *s) {
@@ -44,16 +57,6 @@ VariantConstructor variant_ctor(VariantConstructor ctor) {
 void free_variant_ctor(VariantConstructor *ctor) {
     free(ctor->name);
     vec_typeid_drop(&ctor->args);
-}
-
-Type *new_variant(vec_variant ctors) {
-    Type *ty = malloc(sizeof(Type));
-    if (!ty) return NULL;
-
-    ty->kind = TK_VARIANT;
-    ty->variant = ctors;
-
-    return ty;
 }
 
 void free_type(Type *ty) {
@@ -147,4 +150,18 @@ Pattern pt_wildcard(void) {
     return (Pattern){
         .kind = PK_WILDCARD
     };
+}
+
+Compiler compiler_new(void) {
+    return (Compiler){
+        .types = vec_type_init()
+    };
+}
+
+void compiler_drop(Compiler *compiler) {
+    vec_type_drop(&compiler->types);
+}
+
+const Type *type_new(Compiler *compiler, Type ty) {
+    return vec_type_push(&compiler->types, ty);
 }

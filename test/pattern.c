@@ -45,7 +45,12 @@ static void test_int_pattern(void) {
 }
 
 static void test_int_bool_tuple_pattern(void) {
-    Type *int_bool_tuple = new_tuple(MAKE(vec_typeid, {ty_int, ty_bool}));
+    Compiler comp = compiler_new();
+    const Type *bool_type = type_new(&comp, ty_bool());
+    const Type *int_type = type_new(&comp, ty_int());
+    const Type *int_bool_tuple = type_new(&comp, ty_tuple(
+        MAKE(vec_typeid, {int_type, bool_type})
+    ));
 
     Pattern pt = pt_tuple(int_bool_tuple, MAKE(vec_pattern, {
         pt_int(123),
@@ -58,16 +63,22 @@ static void test_int_bool_tuple_pattern(void) {
     assert_int_pattern(vec_pattern_at(&pt.ctor.args, 0), 123);
     assert_true_pattern(vec_pattern_at(&pt.ctor.args, 1));
 
-    free_type(int_bool_tuple);
+    compiler_drop(&comp);
 }
 
 static void test_result_variant_pattern(void) {
-    Type *int_int_tuple = new_tuple(MAKE(vec_typeid, {ty_int, ty_int}));
+    Compiler comp = compiler_new();
+    const Type *int_type = type_new(&comp, ty_int());
+    const Type *int_int_tuple = type_new(&comp, ty_tuple(
+        MAKE(vec_typeid, {int_type, int_type})
+    ));
 
-    Type *result_type = new_variant(MAKE(vec_variant, {
-        {"Ok",  MAKE(vec_typeid, {int_int_tuple})},
-        {"Err", MAKE(vec_typeid, {ty_int})}
-    }));
+    const Type *result_type = type_new(&comp, ty_variant(
+        MAKE(vec_variant, {
+            {"Ok",  MAKE(vec_typeid, {int_int_tuple})},
+            {"Err", MAKE(vec_typeid, {int_type})}
+        })
+    ));
 
     Pattern ok_pt = pt_variant(result_type, "Ok", MAKE(vec_pattern, {
         pt_tuple(int_int_tuple, MAKE(vec_pattern, {
@@ -88,8 +99,7 @@ static void test_result_variant_pattern(void) {
 
     // TODO: Test the `Err` constructor.
 
-    free_type(result_type);
-    free_type(int_int_tuple);
+    compiler_drop(&comp);
 }
 
 static void test_wildcard_pattern(void) {
