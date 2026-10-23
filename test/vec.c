@@ -31,7 +31,7 @@ static void str_free(char **str) {
 #include <template/vec.h>
 
 static void test_vec_str(void) {
-    vec_str v = {0};
+    vec_str v = vec_str_init();
 
     // Empty vector
     assert(vec_str_size(&v) == 0);
@@ -97,7 +97,7 @@ static void test_vec_str(void) {
     assert(vec_str_capacity(&v) == 0);
 
     // Vector from an array
-    v = MAKE(vec_str, { str("1"), str("2"), str("3") });
+    vec_str_take(&v, MAKE(vec_str, { str("1"), str("2"), str("3") }));
 
     assert(vec_str_size(&v) == 3);
     assert(vec_str_capacity(&v) == 3);

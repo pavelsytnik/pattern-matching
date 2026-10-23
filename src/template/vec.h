@@ -23,6 +23,21 @@
 #endif
 #undef DECLARED
 
+static inline Self MEMB(_init)(void) {
+    return (Self){0};
+}
+
+static inline Self MEMB(_with_capacity)(size_t cap) {
+    SelfValue *d = malloc(cap * sizeof(SelfValue));
+    return (d) ? (Self){d, 0, cap} : (Self){0};
+}
+
+static inline Self MEMB(_move)(Self *self) {
+    Self m = *self;
+    memset(self, 0, sizeof(Self));
+    return m;
+}
+
 static inline size_t MEMB(_size)(const Self *self) {
     return self->size;
 }
@@ -50,6 +65,11 @@ static inline void MEMB(_drop)(Self *self) {
     self->data = NULL;
 }
 
+static inline void MEMB(_take)(Self *self, Self unowned) {
+    MEMB(_drop)(self);
+    *self = unowned;
+}
+
 static inline bool MEMB(_reserve)(Self *self, size_t cap) {
     if (cap <= self->capacity) return true;
 
@@ -70,11 +90,11 @@ static inline bool MEMB(_reserve)(Self *self, size_t cap) {
 }
 
 static inline Self MEMB(_from)(const SelfValue *arr, size_t n) {
-    Self out = {0};
-    if (!MEMB(_reserve)(&out, n)) return out;
-
-    memcpy(out.data, arr, n * sizeof(*arr));
-    out.size = n;
+    Self out = MEMB(_with_capacity)(n);
+    if (out.data) {
+        memcpy(out.data, arr, n * sizeof(*arr));
+        out.size = n;
+    }
     return out;
 }
 
