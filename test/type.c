@@ -4,25 +4,23 @@
 #include <pm.h>
 #include <template/types.h>
 
+static const Type *type_by_id(const Compiler *comp, TypeId id) {
+    return vec_type_at(&comp->types, id);
+}
+
 static void test_bool_type(void) {
-    Compiler comp = compiler_new();
-    const Type *bool_type = type_new(&comp, ty_bool());
+    Type bool_type = ty_bool();
 
-    assert(bool_type->kind == TK_BOOL);
-
-    compiler_drop(&comp);
+    assert(bool_type.kind == TK_BOOL);
 }
 
 static void test_int_type(void) {
-    Compiler comp = compiler_new();
-    const Type *int_type = type_new(&comp, ty_int());
+    Type int_type = ty_int();
 
-    assert(int_type->kind == TK_INT);
-
-    compiler_drop(&comp);
+    assert(int_type.kind == TK_INT);
 }
 
-static Type make_option_type(const Type *ty) {
+static Type make_option_type(TypeId ty) {
     return ty_variant(MAKE(vec_variant, {
         {"Some", MAKE(vec_typeid, {ty})},
         {"None", vec_typeid_init()}
@@ -31,12 +29,13 @@ static Type make_option_type(const Type *ty) {
 
 static void test_option_int_type(void) {
     Compiler comp = compiler_new();
-    const Type *int_type = type_new(&comp, ty_int());
-    const Type *opt_int_type = type_new(&comp, make_option_type(int_type));
+    TypeId int_type = type_new(&comp, ty_int());
+    TypeId opt_int_type = type_new(&comp, make_option_type(int_type));
 
-    const vec_variant *ctors = &opt_int_type->variant;
+    const Type *ty = type_by_id(&comp, opt_int_type);
+    const vec_variant *ctors = &ty->variant;
 
-    assert(opt_int_type->kind == TK_VARIANT);
+    assert(ty->kind == TK_VARIANT);
     assert(vec_variant_size(ctors) == 2);
 
     assert(vec_typeid_size(&vec_variant_at(ctors, 0)->args) == 1);
@@ -51,22 +50,26 @@ static void test_option_int_type(void) {
 
 static void test_option_int_and_unit_type(void) {
     Compiler comp = compiler_new();
-    const Type *int_type = type_new(&comp, ty_int());
-    const Type *opt_int_type = type_new(&comp, make_option_type(int_type));
+    TypeId int_type = type_new(&comp, ty_int());
+    TypeId opt_int_type = type_new(&comp, make_option_type(int_type));
     // option_int_type is tested in the function above.
 
-    const Type *unit_type = type_new(&comp, ty_tuple(vec_typeid_init()));
+    TypeId unit_type = type_new(&comp, ty_tuple(vec_typeid_init()));
 
-    assert(unit_type->kind == TK_TUPLE);
-    assert(vec_typeid_is_empty(&unit_type->tuple));
+    {
+        const Type *ty = type_by_id(&comp, unit_type);
+        assert(ty->kind == TK_TUPLE);
+        assert(vec_typeid_is_empty(&ty->tuple));
+    }
 
-    const Type *opt_int_and_unit_type = type_new(&comp, ty_tuple(
+    TypeId opt_int_and_unit_type = type_new(&comp, ty_tuple(
         MAKE(vec_typeid, { opt_int_type, unit_type })
     ));
 
-    const vec_typeid *args = &opt_int_and_unit_type->tuple;
+    const Type *ty = type_by_id(&comp, opt_int_and_unit_type);
+    const vec_typeid *args = &ty->tuple;
 
-    assert(opt_int_and_unit_type->kind == TK_TUPLE);
+    assert(ty->kind == TK_TUPLE);
     assert(vec_typeid_size(args) == 2);
     assert(*vec_typeid_at(args, 0) == opt_int_type);
     assert(*vec_typeid_at(args, 1) == unit_type);

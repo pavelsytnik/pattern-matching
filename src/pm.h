@@ -21,8 +21,10 @@ typedef struct Constructor Constructor;
 typedef struct Pattern Pattern;
 typedef struct Compiler Compiler;
 
+typedef size_t TypeId;
+
 DECLARE_VEC(vec_type, Type);
-DECLARE_VEC(vec_typeid, const Type *);
+DECLARE_VEC(vec_typeid, TypeId);
 DECLARE_VEC(vec_variant, VariantConstructor);
 DECLARE_VEC(vec_pattern, Pattern);
 
@@ -65,9 +67,9 @@ struct Constructor {
 
     union {
         int32_t integer;
-        const Type *tuple;
+        TypeId tuple;
         struct {
-            const Type *type;
+            TypeId type;
             size_t ctor_idx;
         } variant;
     };
@@ -96,7 +98,7 @@ void free_type(Type *ty);
 #include "template/vec.h"
 
 #define DECLARED
-#define T vec_typeid, const Type *
+#define T vec_typeid, TypeId
 #include "template/vec.h"
 
 VariantConstructor variant_ctor(VariantConstructor ctor);
@@ -123,12 +125,12 @@ Type ty_variant(vec_variant ctors);
 Pattern pt_false(void);
 Pattern pt_true(void);
 Pattern pt_int(int32_t i);
-Pattern pt_tuple(const Type *ty, vec_pattern args);
-Pattern pt_variant(const Type *ty, const char *name, vec_pattern args);
+Pattern pt_tuple(TypeId ty, vec_pattern args);
+Pattern pt_variant(TypeId ty, size_t ctor_idx, vec_pattern args);
 Pattern pt_wildcard(void);
 
 Compiler compiler_new(void);
 void compiler_drop(Compiler *compiler);
-const Type *type_new(Compiler *compiler, Type ty);
+TypeId type_new(Compiler *compiler, Type ty);
 
 #endif // pm__h_

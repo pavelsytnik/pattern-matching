@@ -67,17 +67,6 @@ void free_type(Type *ty) {
     }
 }
 
-static size_t variant_ctor_idx(const Type *ty, const char *name) {
-    size_t n = vec_variant_size(&ty->variant);
-
-    for (size_t i = 0; i < n; i++) {
-        if (strcmp(vec_variant_at(&ty->variant, i)->name, name) == 0) {
-            return i;
-        }
-    }
-    return (size_t)-1;
-}
-
 Pattern pt_false(void) {
     return (Pattern){
         .kind = PK_CTOR,
@@ -115,7 +104,7 @@ Pattern pt_int(int32_t i) {
     };
 }
 
-Pattern pt_tuple(const Type *ty, vec_pattern args) {
+Pattern pt_tuple(TypeId ty, vec_pattern args) {
     return (Pattern){
         .kind = PK_CTOR,
         .ctor = {
@@ -128,9 +117,7 @@ Pattern pt_tuple(const Type *ty, vec_pattern args) {
     };
 }
 
-Pattern pt_variant(const Type *ty, const char *name, vec_pattern args) {
-    size_t ctor_idx = variant_ctor_idx(ty, name);
-
+Pattern pt_variant(TypeId ty, size_t ctor_idx, vec_pattern args) {
     return (Pattern){
         .kind = PK_CTOR,
         .ctor = {
@@ -173,6 +160,8 @@ void compiler_drop(Compiler *compiler) {
     vec_type_drop(&compiler->types);
 }
 
-const Type *type_new(Compiler *compiler, Type ty) {
-    return vec_type_push(&compiler->types, ty);
+TypeId type_new(Compiler *compiler, Type ty) {
+    TypeId id = vec_type_size(&compiler->types);
+    vec_type_push(&compiler->types, ty);
+    return id;
 }

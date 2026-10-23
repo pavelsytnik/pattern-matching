@@ -49,9 +49,9 @@ static void test_int_pattern(void) {
 
 static void test_int_bool_tuple_pattern(void) {
     Compiler comp = compiler_new();
-    const Type *bool_type = type_new(&comp, ty_bool());
-    const Type *int_type = type_new(&comp, ty_int());
-    const Type *int_bool_tuple = type_new(&comp, ty_tuple(
+    TypeId bool_type = type_new(&comp, ty_bool());
+    TypeId int_type = type_new(&comp, ty_int());
+    TypeId int_bool_tuple = type_new(&comp, ty_tuple(
         MAKE(vec_typeid, {int_type, bool_type})
     ));
 
@@ -72,19 +72,19 @@ static void test_int_bool_tuple_pattern(void) {
 
 static void test_result_variant_pattern(void) {
     Compiler comp = compiler_new();
-    const Type *int_type = type_new(&comp, ty_int());
-    const Type *int_int_tuple = type_new(&comp, ty_tuple(
+    TypeId int_type = type_new(&comp, ty_int());
+    TypeId int_int_tuple = type_new(&comp, ty_tuple(
         MAKE(vec_typeid, {int_type, int_type})
     ));
 
-    const Type *result_type = type_new(&comp, ty_variant(
+    TypeId result_type = type_new(&comp, ty_variant(
         MAKE(vec_variant, {
             {"Ok",  MAKE(vec_typeid, {int_int_tuple})},
             {"Err", MAKE(vec_typeid, {int_type})}
         })
     ));
 
-    Pattern ok_pt = pt_variant(result_type, "Ok", MAKE(vec_pattern, {
+    Pattern ok_pt = pt_variant(result_type, 0, MAKE(vec_pattern, {
         pt_tuple(int_int_tuple, MAKE(vec_pattern, {
             pt_wildcard(),
             pt_int(88)
