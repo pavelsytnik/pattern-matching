@@ -23,6 +23,8 @@
 #endif
 #undef DECLARED
 
+typedef RawValueType SelfRaw;
+
 static inline Self MEMB(_init)(void) {
     return (Self){0};
 }
@@ -89,15 +91,6 @@ static inline bool MEMB(_reserve)(Self *self, size_t cap) {
     return true;
 }
 
-static inline Self MEMB(_from)(const SelfValue *arr, size_t n) {
-    Self out = MEMB(_with_capacity)(n);
-    if (out.data) {
-        memcpy(out.data, arr, n * sizeof(*arr));
-        out.size = n;
-    }
-    return out;
-}
-
 static inline SelfValue *MEMB(_push)(Self *self, SelfValue val) {
     if (self->size == self->capacity) {
         size_t n = (self->capacity == 0) ? 8 : self->capacity * 2;
@@ -109,6 +102,17 @@ static inline SelfValue *MEMB(_push)(Self *self, SelfValue val) {
     *v = val;
 
     return v;
+}
+
+static inline Self MEMB(_from)(const SelfRaw *arr, size_t n) {
+    Self out = MEMB(_with_capacity)(n);
+    if (out.data) {
+        for (size_t i = 0; i < n; i++) {
+            MEMB(_push)(&out, value_from(arr[i]));
+        }
+        out.size = n;
+    }
+    return out;
 }
 
 static inline void MEMB(_pop)(Self *self) {

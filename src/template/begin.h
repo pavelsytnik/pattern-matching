@@ -11,6 +11,7 @@
 #define DEFINE_TYPE(MACRO, SELF, ...) EXPAND(MACRO(SELF, __VA_ARGS__))
 #define MEMB(name) JOIN(Self, name)
 #define SelfValue MEMB(_value_type)
+#define SelfRaw MEMB(_raw_type)
 
 #endif // template__begin__h_
 
@@ -22,6 +23,14 @@
 
 #define Self ARG(1, T)
 #define ValueType ARG(2, T)
+
+#ifndef RawValueType
+  #define RawValueType ValueType
+#endif
+
+#ifndef value_from
+  #define value_from(v) (v)
+#endif
 
 #ifndef value_free
   #define value_free(vp) ((void)(vp))

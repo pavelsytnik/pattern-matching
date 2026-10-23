@@ -4,6 +4,8 @@
  * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 
 #undef value_free
+#undef value_from
+#undef RawValueType
 #undef ValueType
 #undef Self
 #undef T

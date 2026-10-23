@@ -27,6 +27,7 @@ static void str_free(char **str) {
 }
 
 #define value_free str_free
+#define value_from str
 #define T vec_str, char *
 #include <template/vec.h>
 
@@ -97,7 +98,7 @@ static void test_vec_str(void) {
     assert(vec_str_capacity(&v) == 0);
 
     // Vector from an array
-    vec_str_take(&v, MAKE(vec_str, { str("1"), str("2"), str("3") }));
+    vec_str_take(&v, MAKE(vec_str, { "1", "2", "3" }));
 
     assert(vec_str_size(&v) == 3);
     assert(vec_str_capacity(&v) == 3);
