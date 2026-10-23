@@ -104,6 +104,10 @@ static inline SelfValue *MEMB(_push)(Self *self, SelfValue val) {
     return v;
 }
 
+static inline SelfValue *MEMB(_emplace)(Self *self, SelfRaw raw) {
+    return MEMB(_push)(self, value_from(raw));
+}
+
 static inline Self MEMB(_from)(const SelfRaw *arr, size_t n) {
     Self out = MEMB(_with_capacity)(n);
     if (out.data) {
@@ -137,7 +141,7 @@ static inline void MEMB(_shrink_to_fit)(Self *self) {
     MEMB(_reserve)(self, VEC_SHRUNK_SIZE_);
 }
 
-static inline bool MEMB(_insert)(Self *self, size_t idx, const SelfValue *arr, size_t n) {
+static inline bool MEMB(_insert_uninit_)(Self *self, size_t idx, size_t n) {
     if (self->size + n > self->capacity) {
         size_t standard_cap = (self->capacity == 0) ? 8 : self->capacity * 2;
         size_t min_req_cap = self->size + n;
@@ -147,12 +151,26 @@ static inline bool MEMB(_insert)(Self *self, size_t idx, const SelfValue *arr, s
     }
 
     SelfValue *pos = self->data + idx;
-
     memmove(pos + n, pos, (self->size - idx) * sizeof(*pos));
-    memcpy(pos, arr, n * sizeof(*pos));
 
     self->size += n;
 
+    return true;
+}
+
+static inline bool MEMB(_insert)(Self *self, size_t idx, const SelfValue *arr, size_t n) {
+    if (!MEMB(_insert_uninit_)(self, idx, n)) return false;
+
+    memcpy(self->data + idx, arr, n * sizeof(SelfValue));
+    return true;
+}
+
+static inline bool MEMB(_emplace_n)(Self *self, size_t idx, const SelfRaw *arr, size_t n) {
+    if (!MEMB(_insert_uninit_)(self, idx, n)) return false;
+
+    for (SelfValue *p = self->data + idx; n--; p++, arr++) {
+        *p = value_from(*arr);
+    }
     return true;
 }
 

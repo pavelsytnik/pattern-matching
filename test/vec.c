@@ -39,9 +39,9 @@ static void test_vec_str(void) {
     assert(vec_str_capacity(&v) == 0);
     assert(vec_str_is_empty(&v));
 
-    // Push
+    // Push & Emplace
     vec_str_push(&v, str("Hello"));
-    vec_str_push(&v, str("World"));
+    vec_str_emplace(&v, "World");
 
     assert(vec_str_size(&v) == 2);
     assert(vec_str_capacity(&v) == 8);
@@ -82,15 +82,26 @@ static void test_vec_str(void) {
     assert(strcmp(*vec_str_at(&v, 4), "I") == 0);
     assert(strcmp(*vec_str_at(&v, 5), "world") == 0);
 
+    // Emplace N
+    vec_str_raw_type raw[] = { "D", "E", "F", "G", "H" };
+
+    vec_str_emplace_n(&v, 4, raw, sizeof(raw) / sizeof(*raw));
+
+    assert(vec_str_size(&v) == 11);
+    assert(vec_str_capacity(&v) == 16);
+
+    assert(strcmp(*vec_str_at(&v, 4), "D") == 0);
+    assert(strcmp(*vec_str_at(&v, 8), "H") == 0);
+
     // Shrink
     vec_str_shrink_to_fit(&v);
-    assert(vec_str_size(&v) == 6);
-    assert(vec_str_capacity(&v) == 6);
+    assert(vec_str_size(&v) == 11);
+    assert(vec_str_capacity(&v) == 11);
 
     // Clear
     vec_str_clear(&v);
     assert(vec_str_size(&v) == 0);
-    assert(vec_str_capacity(&v) == 6);
+    assert(vec_str_capacity(&v) == 11);
     assert(vec_str_is_empty(&v));
 
     // Shrink an empty vector
