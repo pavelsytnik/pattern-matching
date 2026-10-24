@@ -2,7 +2,7 @@
 #include <string.h>
 
 #include <pm.h>
-#include <template/types.h>
+#include <template/common.h>
 
 static const Type *type_by_id(const Compiler *comp, TypeId id) {
     return vec_type_at(&comp->types, id);

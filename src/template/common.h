@@ -26,4 +26,13 @@
 #define ARG_7_(_1, _2, _3, _4, _5, _6, _7, ...) _7
 #define ARG_8_(_1, _2, _3, _4, _5, _6, _7, _8, ...) _8
 
+#define MAKE_ARRAY(T, ...) ((T [])__VA_ARGS__)
+#define LITERAL_COUNT(T, ...) (sizeof((T [])__VA_ARGS__) / sizeof(T))
+
+#define MAKE(C, ...)                             \
+    C##_from(                                    \
+        MAKE_ARRAY(C##_raw_type, __VA_ARGS__),   \
+        LITERAL_COUNT(C##_raw_type, __VA_ARGS__) \
+    )
+
 #endif // template__common__h_

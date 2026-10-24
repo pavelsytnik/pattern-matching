@@ -3,7 +3,7 @@
 #include <stdlib.h>
 #include <string.h>
 
-#include <template/types.h>
+#include <template/common.h>
 
 static size_t s_str_created_count = 0;
 static size_t s_str_freed_count = 0;

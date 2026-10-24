@@ -4,7 +4,7 @@
 #include <string.h>
 
 #include <pm.h>
-#include <template/types.h>
+#include <template/common.h>
 
 static void assert_ctor_pattern(const Pattern *pt, ConstructorKind ctor_kind, size_t args_n) {
     assert(pt->kind == PK_CTOR);
