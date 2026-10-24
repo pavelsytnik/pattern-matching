@@ -3,8 +3,8 @@
  * Licensed under the MIT License. See LICENSE for license information.  *
  * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 
-#ifndef template__preproc__h_
-#define template__preproc__h_
+#ifndef template__common__h_
+#define template__common__h_
 
 #define EXPAND(X) X
 
@@ -26,4 +26,4 @@
 #define ARG_7_(_1, _2, _3, _4, _5, _6, _7, ...) _7
 #define ARG_8_(_1, _2, _3, _4, _5, _6, _7, _8, ...) _8
 
-#endif // template__preproc__h_
+#endif // template__common__h_

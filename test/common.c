@@ -1,6 +1,6 @@
 #include <assert.h>
 
-#include <template/preproc.h>
+#include <template/common.h>
 
 static void test_join_direct_tokens(void) {
     assert(JOIN(1, 3) == 13);

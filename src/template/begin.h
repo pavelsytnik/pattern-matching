@@ -6,7 +6,7 @@
 #ifndef template__begin__h_
 #define template__begin__h_
 
-#include "preproc.h"
+#include "common.h"
 
 #define DEFINE_TYPE(MACRO, SELF, ...) EXPAND(MACRO(SELF, __VA_ARGS__))
 #define MEMB(name) JOIN(Self, name)

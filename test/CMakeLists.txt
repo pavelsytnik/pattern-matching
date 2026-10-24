@@ -3,7 +3,7 @@ add_library(pm STATIC
     ${PROJECT_SOURCE_DIR}/src/pm.c
     ${PROJECT_SOURCE_DIR}/src/template/begin.h
     ${PROJECT_SOURCE_DIR}/src/template/end.h
-    ${PROJECT_SOURCE_DIR}/src/template/preproc.h
+    ${PROJECT_SOURCE_DIR}/src/template/common.h
     ${PROJECT_SOURCE_DIR}/src/template/types.h
     ${PROJECT_SOURCE_DIR}/src/template/vec.h
 )
@@ -33,5 +33,5 @@ endfunction()
 
 add_pm_test(type)
 add_pm_test(pattern)
-add_pm_test(preproc)
+add_pm_test(common)
 add_pm_test(vec)
