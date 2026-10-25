@@ -91,6 +91,28 @@ static inline bool MEMB(_reserve)(Self *self, size_t cap) {
     return true;
 }
 
+static inline Self MEMB(_clone)(const Self *self) {
+    Self out = MEMB(_with_capacity)(self->size);
+    if (out.data) {
+        out.size = out.capacity;
+        for (size_t i = 0; i < out.size; i++) {
+            out.data[i] = value_clone(self->data[i]);
+        }
+    }
+    return out;
+}
+
+static inline bool MEMB(_copy)(Self *self, const Self *other) {
+    MEMB(_clear)(self);
+    if (!MEMB(_reserve)(self, other->size)) return false;
+
+    self->size = self->capacity;
+    for (size_t i = 0; i < self->size; i++) {
+        self->data[i] = value_clone(other->data[i]);
+    }
+    return true;
+}
+
 static inline SelfValue *MEMB(_push)(Self *self, SelfValue val) {
     if (self->size == self->capacity) {
         size_t n = (self->capacity == 0) ? 8 : self->capacity * 2;

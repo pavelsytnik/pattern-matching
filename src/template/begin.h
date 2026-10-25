@@ -32,6 +32,10 @@
   #define value_from(v) (v)
 #endif
 
+#ifndef value_clone
+  #define value_clone(v) (v)
+#endif
+
 #ifndef value_free
   #define value_free(vp) ((void)(vp))
 #endif

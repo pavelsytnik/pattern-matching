@@ -28,6 +28,7 @@ static void str_free(char **str) {
 
 #define value_free str_free
 #define value_from str
+#define value_clone str
 #define T vec_str, char *
 #include <template/vec.h>
 
@@ -113,6 +114,18 @@ static void test_vec_str(void) {
 
     assert(vec_str_size(&v) == 3);
     assert(vec_str_capacity(&v) == 3);
+
+    // Clone
+    {
+        vec_str v2 = vec_str_clone(&v);
+
+        assert(vec_str_size(&v2) == 3);
+        assert(vec_str_capacity(&v2) == 3);
+        assert(strcmp(*vec_str_at(&v2, 0), "1") == 0);
+        assert(strcmp(*vec_str_at(&v2, 2), "3") == 0);
+
+        vec_str_drop(&v2);
+    }
 
     // Drop
     vec_str_drop(&v);
