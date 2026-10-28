@@ -122,6 +122,12 @@ Type ty_int(void);
 Type ty_tuple(vec_typeid args);
 Type ty_variant(vec_variant ctors);
 
+Constructor cs_false(void);
+Constructor cs_true(void);
+Constructor cs_int(int32_t i);
+Constructor cs_tuple(TypeId ty);
+Constructor cs_variant(TypeId ty, size_t ctor_idx);
+
 Pattern pt_false(void);
 Pattern pt_true(void);
 Pattern pt_int(int32_t i);

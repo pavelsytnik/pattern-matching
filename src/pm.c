@@ -67,6 +67,42 @@ void free_type(Type *ty) {
     }
 }
 
+Constructor cs_false(void) {
+    return (Constructor){
+        .kind = CK_FALSE
+    };
+}
+
+Constructor cs_true(void) {
+    return (Constructor){
+        .kind = CK_TRUE
+    };
+}
+
+Constructor cs_int(int32_t i) {
+    return (Constructor){
+        .kind = CK_INT,
+        .integer = i
+    };
+}
+
+Constructor cs_tuple(TypeId ty) {
+    return (Constructor){
+        .kind = CK_TUPLE,
+        .tuple = ty
+    };
+}
+
+Constructor cs_variant(TypeId ty, size_t ctor_idx) {
+    return (Constructor){
+        .kind = CK_VARIANT,
+        .variant = {
+            .type = ty,
+            .ctor_idx = ctor_idx
+        }
+    };
+}
+
 Pattern pt_false(void) {
     return (Pattern){
         .kind = PK_CTOR,
