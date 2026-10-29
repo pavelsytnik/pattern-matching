@@ -14,19 +14,28 @@
 typedef enum TypeKind TypeKind;
 typedef enum ConstructorKind ConstructorKind;
 typedef enum PatternKind PatternKind;
+typedef enum DecisionKind DecisionKind;
 
 typedef struct Type Type;
 typedef struct VariantConstructor VariantConstructor;
 typedef struct Constructor Constructor;
 typedef struct Pattern Pattern;
+typedef struct Column Column;
+typedef struct Row Row;
 typedef struct Compiler Compiler;
+typedef struct Decision Decision;
+typedef struct Case Case;
 
 typedef size_t TypeId;
+typedef size_t Body;
 
 DECLARE_VEC(vec_type, Type);
 DECLARE_VEC(vec_typeid, TypeId);
 DECLARE_VEC(vec_variant, VariantConstructor);
 DECLARE_VEC(vec_pattern, Pattern);
+DECLARE_VEC(vec_column, Column);
+DECLARE_VEC(vec_row, Row);
+DECLARE_VEC(vec_case, Case);
 
 enum TypeKind {
     TK_BOOL,
@@ -46,6 +55,12 @@ enum ConstructorKind {
 enum PatternKind {
     PK_CTOR,
     PK_WILDCARD
+};
+
+enum DecisionKind {
+    DK_LEAF,
+    DK_FAILURE,
+    DK_BRANCH
 };
 
 struct VariantConstructor {
@@ -86,8 +101,35 @@ struct Pattern {
     };
 };
 
+struct Column {
+    TypeId type;
+    Pattern pattern;
+};
+
+struct Row {
+    vec_column columns;
+    Body body;
+};
+
 struct Compiler {
     vec_type types;
+};
+
+struct Decision {
+    DecisionKind kind;
+
+    union {
+        Body leaf;
+        struct {
+            vec_case cases;
+            Decision *fallback;
+        } branch;
+    };
+};
+
+struct Case {
+    Constructor ctor;
+    Decision decision;
 };
 
 void free_type(Type *ty);
@@ -119,6 +161,31 @@ void pt_drop(Pattern *pt);
 #define T vec_pattern, Pattern
 #include "template/vec.h"
 
+Column column_clone(Column column);
+void column_drop(Column *col);
+
+#define DECLARED
+#define value_clone column_clone
+#define value_free column_drop
+#define T vec_column, Column
+#include "template/vec.h"
+
+void row_drop(Row *row);
+
+#define DECLARED
+#define value_free row_drop
+#define T vec_row, Row
+#include "template/vec.h"
+
+void case_drop(Case *kase);
+
+#define DECLARED
+#define value_free case_drop
+#define T vec_case, Case
+#include "template/vec.h"
+
+void decision_drop(Decision *decision);
+
 Type ty_bool(void);
 Type ty_int(void);
 Type ty_tuple(vec_typeid args);
@@ -136,6 +203,14 @@ Pattern pt_int(int32_t i);
 Pattern pt_tuple(TypeId ty, vec_pattern args);
 Pattern pt_variant(TypeId ty, size_t ctor_idx, vec_pattern args);
 Pattern pt_wildcard(void);
+
+Column column_new(TypeId ty, Pattern pt);
+Row row_new(vec_column cols, Body body);
+Case case_new(Constructor ctor, Decision decision);
+
+Decision dc_leaf(Body body);
+Decision dc_failure(void);
+Decision dc_branch(vec_case cases, Decision *fallback);
 
 Compiler compiler_new(void);
 void compiler_drop(Compiler *compiler);

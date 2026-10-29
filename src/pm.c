@@ -193,6 +193,53 @@ void pt_drop(Pattern *pt) {
     }
 }
 
+Decision dc_leaf(Body body) {
+    return (Decision){
+        .kind = DK_LEAF,
+        .leaf = body
+    };
+}
+
+Decision dc_failure(void) {
+    return (Decision){
+        .kind = DK_FAILURE
+    };
+}
+
+Decision dc_branch(vec_case cases, Decision *fallback) {
+    return (Decision){
+        .kind = DK_BRANCH,
+        .branch = {
+            .cases = cases,
+            .fallback = fallback
+        }
+    };
+}
+
+Column column_clone(Column col) {
+    col.pattern = pt_clone(col.pattern);
+    return col;
+}
+
+void column_drop(Column *col) {
+    pt_drop(&col->pattern);
+}
+
+void row_drop(Row *row) {
+    vec_column_drop(&row->columns);
+}
+
+void case_drop(Case *kase) {
+    decision_drop(&kase->decision);
+}
+
+void decision_drop(Decision *decision) {
+    if (decision->kind == DK_BRANCH) {
+        vec_case_drop(&decision->branch.cases);
+        free(decision->branch.fallback);
+    }
+}
+
 Compiler compiler_new(void) {
     return (Compiler){
         .types = vec_type_init()
@@ -207,4 +254,25 @@ TypeId type_new(Compiler *compiler, Type ty) {
     TypeId id = vec_type_size(&compiler->types);
     vec_type_push(&compiler->types, ty);
     return id;
+}
+
+Column column_new(TypeId ty, Pattern pt) {
+    return (Column){
+        .type = ty,
+        .pattern = pt
+    };
+}
+
+Row row_new(vec_column cols, Body body) {
+    return (Row){
+        .columns = cols,
+        .body = body
+    };
+}
+
+Case case_new(Constructor ctor, Decision decision) {
+    return (Case){
+        .ctor = ctor,
+        .decision = decision
+    };
 }
