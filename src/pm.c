@@ -175,6 +175,13 @@ Pattern pt_wildcard(void) {
     };
 }
 
+Pattern pt_clone(Pattern pt) {
+    if (pt.kind == PK_CTOR && (pt.ctor.of.kind == CK_TUPLE || pt.ctor.of.kind == CK_VARIANT)) {
+        pt.ctor.args = vec_pattern_clone(&pt.ctor.args);
+    }
+    return pt;
+}
+
 void pt_drop(Pattern *pt) {
     if (pt->kind != PK_CTOR) return;
 
