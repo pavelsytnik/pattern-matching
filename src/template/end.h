@@ -4,6 +4,7 @@
  * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 
 #undef value_free
+#undef value_clone
 #undef value_from
 #undef RawValueType
 #undef ValueType
