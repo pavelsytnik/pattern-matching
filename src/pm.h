@@ -6,6 +6,7 @@
 #ifndef pm__h_
 #define pm__h_
 
+#include <stdbool.h>
 #include <stddef.h>
 #include <stdint.h>
 
@@ -32,6 +33,7 @@ typedef size_t Body;
 DECLARE_VEC(vec_type, Type);
 DECLARE_VEC(vec_typeid, TypeId);
 DECLARE_VEC(vec_variant, VariantConstructor);
+DECLARE_VEC(vec_ctor, Constructor);
 DECLARE_VEC(vec_pattern, Pattern);
 DECLARE_VEC(vec_column, Column);
 DECLARE_VEC(vec_row, Row);
@@ -152,6 +154,10 @@ void free_variant_ctor(VariantConstructor *ctor);
 #define T vec_variant, VariantConstructor
 #include "template/vec.h"
 
+#define DECLARED
+#define T vec_ctor, Constructor
+#include "template/vec.h"
+
 Pattern pt_clone(Pattern pt);
 void pt_drop(Pattern *pt);
 
@@ -197,6 +203,8 @@ Constructor cs_int(int32_t i);
 Constructor cs_tuple(TypeId ty);
 Constructor cs_variant(TypeId ty, size_t ctor_idx);
 
+bool cs_eq(const Constructor *c1, const Constructor *c2);
+
 Pattern pt_false(void);
 Pattern pt_true(void);
 Pattern pt_int(int32_t i);
@@ -215,5 +223,8 @@ Decision dc_branch(vec_case cases, Decision *fallback);
 Compiler compiler_new(void);
 void compiler_drop(Compiler *compiler);
 TypeId type_new(Compiler *compiler, Type ty);
+const Type *type_get(const Compiler *compiler, TypeId id);
+
+Decision compile(const Compiler *compiler, vec_row rows);
 
 #endif // pm__h_
