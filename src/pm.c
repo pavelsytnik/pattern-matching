@@ -36,6 +36,14 @@ Type ty_variant(vec_variant ctors) {
     };
 }
 
+void ty_drop(Type *ty) {
+    if (ty->kind == TK_TUPLE) {
+        vec_typeid_drop(&ty->tuple);
+    } else if (ty->kind == TK_VARIANT) {
+        vec_variant_drop(&ty->variant);
+    }
+}
+
 static char *copy_string(const char *s) {
     if (!s) return NULL;
 
@@ -58,14 +66,6 @@ VariantConstructor variant_from(VariantConstructor ctor) {
 void variant_drop(VariantConstructor *ctor) {
     free(ctor->name);
     vec_typeid_drop(&ctor->args);
-}
-
-void ty_drop(Type *ty) {
-    if (ty->kind == TK_TUPLE) {
-        vec_typeid_drop(&ty->tuple);
-    } else if (ty->kind == TK_VARIANT) {
-        vec_variant_drop(&ty->variant);
-    }
 }
 
 Constructor cs_false(void) {
@@ -102,6 +102,28 @@ Constructor cs_variant(TypeId ty, size_t ctor_idx) {
             .ctor_idx = ctor_idx
         }
     };
+}
+
+bool cs_eq(const Constructor *c1, const Constructor *c2) {
+    if (c1 == c2) return true;
+    if (c1->kind != c2->kind) return false;
+
+    ConstructorKind kind = c1->kind;
+
+    switch (kind) {
+    case CK_FALSE:
+    case CK_TRUE:
+        return true;
+    case CK_INT:
+        return c1->integer == c2->integer;
+    case CK_TUPLE:
+        return c1->tuple == c2->tuple;
+    case CK_VARIANT:
+        return c1->variant.type == c2->variant.type
+            && c1->variant.ctor_idx == c2->variant.ctor_idx;
+    }
+
+    return false;
 }
 
 Pattern pt_false(void) {
@@ -194,6 +216,33 @@ void pt_drop(Pattern *pt) {
     }
 }
 
+Column column_new(TypeId ty, Pattern pt) {
+    return (Column){
+        .type = ty,
+        .pattern = pt
+    };
+}
+
+Column column_clone(Column col) {
+    col.pattern = pt_clone(col.pattern);
+    return col;
+}
+
+void column_drop(Column *col) {
+    pt_drop(&col->pattern);
+}
+
+Row row_new(vec_column cols, Body body) {
+    return (Row){
+        .columns = cols,
+        .body = body
+    };
+}
+
+void row_drop(Row *row) {
+    vec_column_drop(&row->columns);
+}
+
 Decision dc_leaf(Body body) {
     return (Decision){
         .kind = DK_LEAF,
@@ -217,28 +266,22 @@ Decision dc_branch(vec_case cases, Decision *fallback) {
     };
 }
 
-Column column_clone(Column col) {
-    col.pattern = pt_clone(col.pattern);
-    return col;
-}
-
-void column_drop(Column *col) {
-    pt_drop(&col->pattern);
-}
-
-void row_drop(Row *row) {
-    vec_column_drop(&row->columns);
-}
-
-void case_drop(Case *kase) {
-    decision_drop(&kase->decision);
-}
-
 void decision_drop(Decision *decision) {
     if (decision->kind == DK_BRANCH) {
         vec_case_drop(&decision->branch.cases);
         free(decision->branch.fallback);
     }
+}
+
+Case case_new(Constructor ctor, Decision decision) {
+    return (Case){
+        .ctor = ctor,
+        .decision = decision
+    };
+}
+
+void case_drop(Case *kase) {
+    decision_drop(&kase->decision);
 }
 
 Compiler compiler_new(void) {
@@ -259,49 +302,6 @@ TypeId new_type(Compiler *compiler, Type ty) {
 
 const Type *get_type(const Compiler *compiler, TypeId id) {
     return vec_type_at(&compiler->types, id);
-}
-
-Column column_new(TypeId ty, Pattern pt) {
-    return (Column){
-        .type = ty,
-        .pattern = pt
-    };
-}
-
-Row row_new(vec_column cols, Body body) {
-    return (Row){
-        .columns = cols,
-        .body = body
-    };
-}
-
-Case case_new(Constructor ctor, Decision decision) {
-    return (Case){
-        .ctor = ctor,
-        .decision = decision
-    };
-}
-
-bool cs_eq(const Constructor *c1, const Constructor *c2) {
-    if (c1 == c2) return true;
-    if (c1->kind != c2->kind) return false;
-
-    ConstructorKind kind = c1->kind;
-
-    switch (kind) {
-    case CK_FALSE:
-    case CK_TRUE:
-        return true;
-    case CK_INT:
-        return c1->integer == c2->integer;
-    case CK_TUPLE:
-        return c1->tuple == c2->tuple;
-    case CK_VARIANT:
-        return c1->variant.type == c2->variant.type
-            && c1->variant.ctor_idx == c2->variant.ctor_idx;
-    }
-
-    return false;
 }
 
 static bool ctors_contain(const vec_ctor *ctors, Constructor ctor) {
