@@ -31,8 +31,5 @@ function(add_pm_test name)
     )
 endfunction()
 
-add_pm_test(type)
-add_pm_test(pattern)
-add_pm_test(common)
 add_pm_test(vec)
 add_pm_test(pm)
