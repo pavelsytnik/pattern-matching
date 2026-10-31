@@ -5,7 +5,7 @@
 
 static void test_int(void) {
     Compiler c = compiler_new();
-    TypeId i = type_new(&c, ty_int());
+    TypeId i = new_type(&c, ty_int());
 
     Decision d = compile(&c, MAKE(vec_row, {
         row_new(MAKE(vec_column, {
@@ -39,8 +39,8 @@ static void test_int(void) {
 static void test_option_int(void) {
     Compiler c = compiler_new();
 
-    TypeId i = type_new(&c, ty_int());
-    TypeId v = type_new(&c, ty_variant(MAKE(vec_variant, {
+    TypeId i = new_type(&c, ty_int());
+    TypeId v = new_type(&c, ty_variant(MAKE(vec_variant, {
         { "Some", MAKE(vec_typeid, { i }) },
         { "None", vec_typeid_init() }
     })));

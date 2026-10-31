@@ -29,8 +29,8 @@ static Type make_option_type(TypeId ty) {
 
 static void test_option_int_type(void) {
     Compiler comp = compiler_new();
-    TypeId int_type = type_new(&comp, ty_int());
-    TypeId opt_int_type = type_new(&comp, make_option_type(int_type));
+    TypeId int_type = new_type(&comp, ty_int());
+    TypeId opt_int_type = new_type(&comp, make_option_type(int_type));
 
     const Type *ty = type_by_id(&comp, opt_int_type);
     const vec_variant *ctors = &ty->variant;
@@ -50,11 +50,11 @@ static void test_option_int_type(void) {
 
 static void test_option_int_and_unit_type(void) {
     Compiler comp = compiler_new();
-    TypeId int_type = type_new(&comp, ty_int());
-    TypeId opt_int_type = type_new(&comp, make_option_type(int_type));
+    TypeId int_type = new_type(&comp, ty_int());
+    TypeId opt_int_type = new_type(&comp, make_option_type(int_type));
     // option_int_type is tested in the function above.
 
-    TypeId unit_type = type_new(&comp, ty_tuple(vec_typeid_init()));
+    TypeId unit_type = new_type(&comp, ty_tuple(vec_typeid_init()));
 
     {
         const Type *ty = type_by_id(&comp, unit_type);
@@ -62,7 +62,7 @@ static void test_option_int_and_unit_type(void) {
         assert(vec_typeid_is_empty(&ty->tuple));
     }
 
-    TypeId opt_int_and_unit_type = type_new(&comp, ty_tuple(
+    TypeId opt_int_and_unit_type = new_type(&comp, ty_tuple(
         MAKE(vec_typeid, { opt_int_type, unit_type })
     ));
 

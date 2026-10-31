@@ -134,10 +134,10 @@ struct Case {
     Decision decision;
 };
 
-void free_type(Type *ty);
+void ty_drop(Type *ty);
 
 #define DECLARED
-#define value_free free_type
+#define value_free ty_drop
 #define T vec_type, Type
 #include "template/vec.h"
 
@@ -145,12 +145,12 @@ void free_type(Type *ty);
 #define T vec_typeid, TypeId
 #include "template/vec.h"
 
-VariantConstructor variant_ctor(VariantConstructor ctor);
-void free_variant_ctor(VariantConstructor *ctor);
+VariantConstructor variant_from(VariantConstructor ctor);
+void variant_drop(VariantConstructor *ctor);
 
 #define DECLARED
-#define value_from variant_ctor
-#define value_free free_variant_ctor
+#define value_from variant_from
+#define value_free variant_drop
 #define T vec_variant, VariantConstructor
 #include "template/vec.h"
 
@@ -222,8 +222,8 @@ Decision dc_branch(vec_case cases, Decision *fallback);
 
 Compiler compiler_new(void);
 void compiler_drop(Compiler *compiler);
-TypeId type_new(Compiler *compiler, Type ty);
-const Type *type_get(const Compiler *compiler, TypeId id);
+TypeId new_type(Compiler *compiler, Type ty);
+const Type *get_type(const Compiler *compiler, TypeId id);
 
 Decision compile(const Compiler *compiler, vec_row rows);
 

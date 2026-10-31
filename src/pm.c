@@ -48,19 +48,19 @@ static char *copy_string(const char *s) {
     return cp;
 }
 
-VariantConstructor variant_ctor(VariantConstructor ctor) {
+VariantConstructor variant_from(VariantConstructor ctor) {
     return (VariantConstructor){
         .name = copy_string(ctor.name),
         .args = vec_typeid_move(&ctor.args)
     };
 }
 
-void free_variant_ctor(VariantConstructor *ctor) {
+void variant_drop(VariantConstructor *ctor) {
     free(ctor->name);
     vec_typeid_drop(&ctor->args);
 }
 
-void free_type(Type *ty) {
+void ty_drop(Type *ty) {
     if (ty->kind == TK_TUPLE) {
         vec_typeid_drop(&ty->tuple);
     } else if (ty->kind == TK_VARIANT) {
@@ -251,13 +251,13 @@ void compiler_drop(Compiler *compiler) {
     vec_type_drop(&compiler->types);
 }
 
-TypeId type_new(Compiler *compiler, Type ty) {
+TypeId new_type(Compiler *compiler, Type ty) {
     TypeId id = vec_type_size(&compiler->types);
     vec_type_push(&compiler->types, ty);
     return id;
 }
 
-const Type *type_get(const Compiler *compiler, TypeId id) {
+const Type *get_type(const Compiler *compiler, TypeId id) {
     return vec_type_at(&compiler->types, id);
 }
 
@@ -319,7 +319,7 @@ static const Column *rows_first_column_at(const vec_row *rows, size_t idx) {
 
 static vec_ctor collect_ctors(const Compiler *compiler, const vec_row *rows, bool *fallback) {
     TypeId type_id = rows_first_column_at(rows, 0)->type;
-    const Type *type = type_get(compiler, type_id);
+    const Type *type = get_type(compiler, type_id);
 
     vec_ctor ctors = vec_ctor_init();
 
@@ -357,10 +357,10 @@ static const vec_typeid *ctor_args(const Compiler *compiler, Constructor ctor) {
     const vec_typeid *args = NULL;
 
     if (ctor.kind == CK_TUPLE) {
-        const Type *type = type_get(compiler, ctor.tuple);
+        const Type *type = get_type(compiler, ctor.tuple);
         args = &type->tuple;
     } else if (ctor.kind == CK_VARIANT) {
-        const Type *type = type_get(compiler, ctor.variant.type);
+        const Type *type = get_type(compiler, ctor.variant.type);
         const VariantConstructor *variant = vec_variant_at(&type->variant, ctor.variant.ctor_idx);
         args = &variant->args;
     }
