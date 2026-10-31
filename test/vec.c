@@ -3,7 +3,7 @@
 #include <stdlib.h>
 #include <string.h>
 
-#include <template/common.h>
+#include <util/common.h>
 
 static size_t s_str_created_count = 0;
 static size_t s_str_freed_count = 0;
@@ -30,7 +30,7 @@ static void str_free(char **str) {
 #define value_from str
 #define value_clone str
 #define T vec_str, char *
-#include <template/vec.h>
+#include <util/vec.h>
 
 static void test_vec_str(void) {
     vec_str v = vec_str_init();

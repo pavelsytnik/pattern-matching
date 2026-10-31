@@ -3,8 +3,8 @@
  * Licensed under the MIT License. See LICENSE for license information.  *
  * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 
-#ifndef template__types__h_
-#define template__types__h_
+#ifndef util__types__h_
+#define util__types__h_
 
 #define DECLARE_VEC(SELF, TYPE)     \
     typedef TYPE SELF##_value_type; \
@@ -14,4 +14,4 @@
         size_t capacity;            \
     } SELF
 
-#endif // template__types__h_
+#endif // util__types__h_

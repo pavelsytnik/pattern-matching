@@ -10,7 +10,7 @@
 #include <stddef.h>
 #include <stdint.h>
 
-#include "template/types.h"
+#include "util/types.h"
 
 typedef enum TypeKind TypeKind;
 typedef enum ConstructorKind ConstructorKind;
@@ -65,11 +65,11 @@ void ty_drop(Type *ty);
 #define DECLARED
 #define value_free ty_drop
 #define T vec_type, Type
-#include "template/vec.h"
+#include "util/vec.h"
 
 #define DECLARED
 #define T vec_typeid, TypeId
-#include "template/vec.h"
+#include "util/vec.h"
 
 struct VariantConstructor {
     char *name;
@@ -83,7 +83,7 @@ void variant_drop(VariantConstructor *ctor);
 #define value_from variant_from
 #define value_free variant_drop
 #define T vec_variant, VariantConstructor
-#include "template/vec.h"
+#include "util/vec.h"
 
 enum ConstructorKind {
     CK_FALSE,
@@ -116,7 +116,7 @@ bool cs_eq(const Constructor *c1, const Constructor *c2);
 
 #define DECLARED
 #define T vec_ctor, Constructor
-#include "template/vec.h"
+#include "util/vec.h"
 
 enum PatternKind {
     PK_CTOR,
@@ -148,7 +148,7 @@ void pt_drop(Pattern *pt);
 #define value_clone pt_clone
 #define value_free pt_drop
 #define T vec_pattern, Pattern
-#include "template/vec.h"
+#include "util/vec.h"
 
 struct Column {
     TypeId type;
@@ -163,7 +163,7 @@ void column_drop(Column *col);
 #define value_clone column_clone
 #define value_free column_drop
 #define T vec_column, Column
-#include "template/vec.h"
+#include "util/vec.h"
 
 struct Row {
     vec_column columns;
@@ -176,7 +176,7 @@ void row_drop(Row *row);
 #define DECLARED
 #define value_free row_drop
 #define T vec_row, Row
-#include "template/vec.h"
+#include "util/vec.h"
 
 enum DecisionKind {
     DK_LEAF,
@@ -213,7 +213,7 @@ void case_drop(Case *kase);
 #define DECLARED
 #define value_free case_drop
 #define T vec_case, Case
-#include "template/vec.h"
+#include "util/vec.h"
 
 struct Compiler {
     vec_type types;

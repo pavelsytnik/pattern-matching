@@ -1,7 +1,7 @@
 #include <assert.h>
 
 #include <pm.h>
-#include <template/common.h>
+#include <util/common.h>
 
 static void test_int(void) {
     Compiler c = compiler_new();

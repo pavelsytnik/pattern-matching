@@ -3,8 +3,8 @@
  * Licensed under the MIT License. See LICENSE for license information.  *
  * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 
-#ifndef template__vec__h_
-#define template__vec__h_
+#ifndef util__vec__h_
+#define util__vec__h_
 
 #include <stdbool.h>
 #include <stdlib.h>
@@ -14,7 +14,7 @@
 
 #define VEC_SHRUNK_SIZE_ ((size_t)-1)
 
-#endif // template__vec__h_
+#endif // util__vec__h_
 
 #include "begin.h"
 

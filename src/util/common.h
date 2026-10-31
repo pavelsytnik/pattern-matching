@@ -3,8 +3,8 @@
  * Licensed under the MIT License. See LICENSE for license information.  *
  * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 
-#ifndef template__common__h_
-#define template__common__h_
+#ifndef util__common__h_
+#define util__common__h_
 
 #define EXPAND(X) X
 
@@ -35,4 +35,4 @@
         LITERAL_COUNT(C##_raw_type, __VA_ARGS__) \
     )
 
-#endif // template__common__h_
+#endif // util__common__h_

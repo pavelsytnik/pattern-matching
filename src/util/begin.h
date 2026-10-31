@@ -3,8 +3,8 @@
  * Licensed under the MIT License. See LICENSE for license information.  *
  * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 
-#ifndef template__begin__h_
-#define template__begin__h_
+#ifndef util__begin__h_
+#define util__begin__h_
 
 #include "common.h"
 
@@ -13,7 +13,7 @@
 #define SelfValue MEMB(_value_type)
 #define SelfRaw MEMB(_raw_type)
 
-#endif // template__begin__h_
+#endif // util__begin__h_
 
 #ifndef T
   #error "T is undefined"

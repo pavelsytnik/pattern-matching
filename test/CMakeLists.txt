@@ -1,11 +1,11 @@
 add_library(pm STATIC
     ${PROJECT_SOURCE_DIR}/src/pm.h
     ${PROJECT_SOURCE_DIR}/src/pm.c
-    ${PROJECT_SOURCE_DIR}/src/template/begin.h
-    ${PROJECT_SOURCE_DIR}/src/template/end.h
-    ${PROJECT_SOURCE_DIR}/src/template/common.h
-    ${PROJECT_SOURCE_DIR}/src/template/types.h
-    ${PROJECT_SOURCE_DIR}/src/template/vec.h
+    ${PROJECT_SOURCE_DIR}/src/util/begin.h
+    ${PROJECT_SOURCE_DIR}/src/util/end.h
+    ${PROJECT_SOURCE_DIR}/src/util/common.h
+    ${PROJECT_SOURCE_DIR}/src/util/types.h
+    ${PROJECT_SOURCE_DIR}/src/util/vec.h
 )
 
 target_include_directories(pm PUBLIC
