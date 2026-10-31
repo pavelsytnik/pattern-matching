@@ -26,14 +26,14 @@ static void str_free(char **str) {
     s_str_freed_count++;
 }
 
-#define value_free str_free
+#define value_drop str_free
 #define value_from str
 #define value_clone str
 #define T vec_str, char *
 #include <util/vec.h>
 
 static void test_vec_str(void) {
-    vec_str v = vec_str_init();
+    vec_str v = vec_str_new();
 
     // Empty vector
     assert(vec_str_size(&v) == 0);
@@ -56,13 +56,13 @@ static void test_vec_str(void) {
     assert(strcmp(*vec_str_at(&v, 1), "world") == 0);
 
     // Insert
-    vec_str_value_type arr[] = {
+    vec_str_value arr[] = {
         str("A"), str("B"), str("C"),
         str("D"), str("E"), str("F"),
         str("G"), str("H"), str("I")
     };
 
-    vec_str_insert(&v, 1, arr, sizeof(arr) / sizeof(*arr));
+    vec_str_insert_n(&v, 1, arr, sizeof(arr) / sizeof(*arr));
 
     assert(vec_str_size(&v) == 11);
     assert(vec_str_capacity(&v) == 16);
@@ -73,7 +73,7 @@ static void test_vec_str(void) {
     assert(strcmp(*vec_str_at(&v, 10), "world") == 0);
 
     // Erase
-    vec_str_erase(&v, 4, 5);
+    vec_str_erase_n(&v, 4, 5);
 
     assert(vec_str_size(&v) == 6);
     assert(vec_str_capacity(&v) == 16);
@@ -84,7 +84,7 @@ static void test_vec_str(void) {
     assert(strcmp(*vec_str_at(&v, 5), "world") == 0);
 
     // Emplace N
-    vec_str_raw_type raw[] = { "D", "E", "F", "G", "H" };
+    vec_str_raw raw[] = { "D", "E", "F", "G", "H" };
 
     vec_str_emplace_n(&v, 4, raw, sizeof(raw) / sizeof(*raw));
 

@@ -3,10 +3,10 @@
  * Licensed under the MIT License. See LICENSE for license information.  *
  * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 
-#undef value_free
+#undef value_drop
 #undef value_clone
 #undef value_from
-#undef RawValueType
-#undef ValueType
+#undef TRaw
+#undef TValue
 #undef Self
 #undef T

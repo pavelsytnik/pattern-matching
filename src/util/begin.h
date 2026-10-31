@@ -10,8 +10,8 @@
 
 #define DEFINE_TYPE(MACRO, SELF, ...) EXPAND(MACRO(SELF, __VA_ARGS__))
 #define MEMB(name) JOIN(Self, name)
-#define SelfValue MEMB(_value_type)
-#define SelfRaw MEMB(_raw_type)
+#define SelfValue MEMB(_value)
+#define SelfRaw MEMB(_raw)
 
 #endif // util__begin__h_
 
@@ -22,10 +22,10 @@
 #endif
 
 #define Self ARG(1, T)
-#define ValueType ARG(2, T)
+#define TValue ARG(2, T)
 
-#ifndef RawValueType
-  #define RawValueType ValueType
+#ifndef TRaw
+  #define TRaw TValue
 #endif
 
 #ifndef value_from
@@ -36,6 +36,6 @@
   #define value_clone(v) (v)
 #endif
 
-#ifndef value_free
-  #define value_free(vp) ((void)(vp))
+#ifndef value_drop
+  #define value_drop(vp) ((void)(vp))
 #endif

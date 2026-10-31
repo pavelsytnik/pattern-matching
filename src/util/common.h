@@ -29,10 +29,10 @@
 #define MAKE_ARRAY(T, ...) ((T [])__VA_ARGS__)
 #define LITERAL_COUNT(T, ...) (sizeof((T [])__VA_ARGS__) / sizeof(T))
 
-#define MAKE(C, ...)                             \
-    C##_from(                                    \
-        MAKE_ARRAY(C##_raw_type, __VA_ARGS__),   \
-        LITERAL_COUNT(C##_raw_type, __VA_ARGS__) \
+#define MAKE(C, ...)                        \
+    C##_from_n(                             \
+        MAKE_ARRAY(C##_raw, __VA_ARGS__),   \
+        LITERAL_COUNT(C##_raw, __VA_ARGS__) \
     )
 
 #endif // util__common__h_

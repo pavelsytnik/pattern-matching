@@ -133,7 +133,7 @@ Pattern pt_false(void) {
             .of = {
                 .kind = CK_FALSE
             },
-            .args = vec_pattern_init()
+            .args = vec_pattern_new()
         }
     };
 }
@@ -145,7 +145,7 @@ Pattern pt_true(void) {
             .of = {
                 .kind = CK_TRUE
             },
-            .args = vec_pattern_init()
+            .args = vec_pattern_new()
         }
     };
 }
@@ -158,7 +158,7 @@ Pattern pt_int(int32_t i) {
                 .kind = CK_INT,
                 .integer = i
             },
-            .args = vec_pattern_init()
+            .args = vec_pattern_new()
         }
     };
 }
@@ -286,7 +286,7 @@ void case_drop(Case *kase) {
 
 Compiler compiler_new(void) {
     return (Compiler){
-        .types = vec_type_init()
+        .types = vec_type_new()
     };
 }
 
@@ -321,7 +321,7 @@ static vec_ctor collect_ctors(const Compiler *compiler, const vec_row *rows, boo
     TypeId type_id = rows_first_column_at(rows, 0)->type;
     const Type *type = get_type(compiler, type_id);
 
-    vec_ctor ctors = vec_ctor_init();
+    vec_ctor ctors = vec_ctor_new();
 
     switch (type->kind) {
     case TK_BOOL:
@@ -369,7 +369,7 @@ static const vec_typeid *ctor_args(const Compiler *compiler, Constructor ctor) {
 }
 
 static vec_row specialize_rows(const Compiler *compiler, const vec_row *rows, Constructor ctor) {
-    vec_row s = vec_row_init();
+    vec_row s = vec_row_new();
 
     for (size_t i = 0; i < vec_row_size(rows); i++) {
         const Row *row = vec_row_at(rows, i);
@@ -382,7 +382,7 @@ static vec_row specialize_rows(const Compiler *compiler, const vec_row *rows, Co
         const vec_typeid *args = ctor_args(compiler, ctor);
         size_t arg_n = (args) ? vec_typeid_size(args) : 0;
 
-        vec_column cols = vec_column_init();
+        vec_column cols = vec_column_new();
 
         for (size_t j = 0; j < arg_n; j++) {
             TypeId t = *vec_typeid_at(args, j);
@@ -409,7 +409,7 @@ static vec_row specialize_rows(const Compiler *compiler, const vec_row *rows, Co
 }
 
 static vec_row fallback_rows(const Compiler *compiler, const vec_row *rows) {
-    vec_row d = vec_row_init();
+    vec_row d = vec_row_new();
 
     for (size_t i = 0; i < vec_row_size(rows); i++) {
         const Row *row = vec_row_at(rows, i);
@@ -419,7 +419,7 @@ static vec_row fallback_rows(const Compiler *compiler, const vec_row *rows) {
             continue;
         }
 
-        vec_column cols = vec_column_init();
+        vec_column cols = vec_column_new();
 
         for (size_t j = 1; j < vec_column_size(&row->columns); j++) {
             const Column *col = vec_column_at(&row->columns, j);
@@ -449,7 +449,7 @@ Decision compile(const Compiler *compiler, vec_row rows) {
     bool fallback_needed;
     vec_ctor ctors = collect_ctors(compiler, &rows, &fallback_needed);
 
-    vec_case cases = vec_case_init();
+    vec_case cases = vec_case_new();
     Decision *fallback = NULL;
 
     for (size_t i = 0; i < vec_ctor_size(&ctors); i++) {

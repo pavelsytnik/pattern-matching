@@ -19,13 +19,13 @@
 #include "begin.h"
 
 #ifndef DECLARED
-  DEFINE_TYPE(DECLARE_VEC, Self, ValueType);
+  DEFINE_TYPE(DECLARE_VEC, Self, TValue);
 #endif
 #undef DECLARED
 
-typedef RawValueType SelfRaw;
+typedef TRaw SelfRaw;
 
-static inline Self MEMB(_init)(void) {
+static inline Self MEMB(_new)(void) {
     return (Self){0};
 }
 
@@ -54,7 +54,7 @@ static inline bool MEMB(_is_empty)(const Self *self) {
 
 static inline void MEMB(_clear)(Self *self) {
     for (size_t i = 0; i < self->size; i++) {
-        value_free(self->data + i);
+        value_drop(self->data + i);
     }
     self->size = 0;
 }
@@ -130,7 +130,7 @@ static inline SelfValue *MEMB(_emplace)(Self *self, SelfRaw raw) {
     return MEMB(_push)(self, value_from(raw));
 }
 
-static inline Self MEMB(_from)(const SelfRaw *arr, size_t n) {
+static inline Self MEMB(_from_n)(const SelfRaw *arr, size_t n) {
     Self out = MEMB(_with_capacity)(n);
     if (out.data) {
         for (size_t i = 0; i < n; i++) {
@@ -143,16 +143,16 @@ static inline Self MEMB(_from)(const SelfRaw *arr, size_t n) {
 
 static inline void MEMB(_pop)(Self *self) {
     SelfValue *v = &self->data[--self->size];
-    value_free(v);
+    value_drop(v);
 }
 
-static inline void MEMB(_erase)(Self *self, size_t idx, size_t len) {
+static inline void MEMB(_erase_n)(Self *self, size_t idx, size_t len) {
     SelfValue *d = self->data + idx;
     SelfValue *p = d;
     SelfValue *end = self->data + self->size;
 
     for (size_t i = 0; i < len; i++) {
-        value_free(p++);
+        value_drop(p++);
     }
 
     memmove(d, p, (end - p) * sizeof(*self->data));
@@ -180,7 +180,7 @@ static inline bool MEMB(_insert_uninit_)(Self *self, size_t idx, size_t n) {
     return true;
 }
 
-static inline bool MEMB(_insert)(Self *self, size_t idx, const SelfValue *arr, size_t n) {
+static inline bool MEMB(_insert_n)(Self *self, size_t idx, const SelfValue *arr, size_t n) {
     if (!MEMB(_insert_uninit_)(self, idx, n)) return false;
 
     memcpy(self->data + idx, arr, n * sizeof(SelfValue));

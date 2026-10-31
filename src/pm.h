@@ -63,7 +63,7 @@ Type ty_variant(vec_variant ctors);
 void ty_drop(Type *ty);
 
 #define DECLARED
-#define value_free ty_drop
+#define value_drop ty_drop
 #define T vec_type, Type
 #include "util/vec.h"
 
@@ -81,7 +81,7 @@ void variant_drop(VariantConstructor *ctor);
 
 #define DECLARED
 #define value_from variant_from
-#define value_free variant_drop
+#define value_drop variant_drop
 #define T vec_variant, VariantConstructor
 #include "util/vec.h"
 
@@ -146,7 +146,7 @@ void pt_drop(Pattern *pt);
 
 #define DECLARED
 #define value_clone pt_clone
-#define value_free pt_drop
+#define value_drop pt_drop
 #define T vec_pattern, Pattern
 #include "util/vec.h"
 
@@ -161,7 +161,7 @@ void column_drop(Column *col);
 
 #define DECLARED
 #define value_clone column_clone
-#define value_free column_drop
+#define value_drop column_drop
 #define T vec_column, Column
 #include "util/vec.h"
 
@@ -174,7 +174,7 @@ Row row_new(vec_column cols, Body body);
 void row_drop(Row *row);
 
 #define DECLARED
-#define value_free row_drop
+#define value_drop row_drop
 #define T vec_row, Row
 #include "util/vec.h"
 
@@ -211,7 +211,7 @@ Case case_new(Constructor ctor, Decision decision);
 void case_drop(Case *kase);
 
 #define DECLARED
-#define value_free case_drop
+#define value_drop case_drop
 #define T vec_case, Case
 #include "util/vec.h"
 

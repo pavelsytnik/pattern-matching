@@ -6,12 +6,12 @@
 #ifndef util__types__h_
 #define util__types__h_
 
-#define DECLARE_VEC(SELF, TYPE)     \
-    typedef TYPE SELF##_value_type; \
-    typedef struct SELF {           \
-        SELF##_value_type *data;    \
-        size_t size;                \
-        size_t capacity;            \
+#define DECLARE_VEC(SELF, TYPE) \
+    typedef TYPE SELF##_value;  \
+    typedef struct SELF {       \
+        SELF##_value *data;     \
+        size_t size;            \
+        size_t capacity;        \
     } SELF
 
 #endif // util__types__h_

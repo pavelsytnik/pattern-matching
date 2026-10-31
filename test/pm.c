@@ -42,12 +42,12 @@ static void test_option_int(void) {
     TypeId i = new_type(&c, ty_int());
     TypeId v = new_type(&c, ty_variant(MAKE(vec_variant, {
         { "Some", MAKE(vec_typeid, { i }) },
-        { "None", vec_typeid_init() }
+        { "None", vec_typeid_new() }
     })));
 
     Decision d = compile(&c, MAKE(vec_row, {
         row_new(MAKE(vec_column, {
-            column_new(v, pt_variant(v, 1, vec_pattern_init()))
+            column_new(v, pt_variant(v, 1, vec_pattern_new()))
         }), 987),
         row_new(MAKE(vec_column, {
             column_new(v, pt_variant(v, 0, MAKE(vec_pattern, {
