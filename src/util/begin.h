@@ -9,9 +9,9 @@
 #include "common.h"
 
 #define x_DEFINE_TYPE(MACRO, SELF, ...) MACRO(SELF, __VA_ARGS__)
-#define x_MEMB(name) x_JOIN(Self, name)
-#define SelfValue x_MEMB(_value)
-#define SelfRaw x_MEMB(_raw)
+#define x_MEMB(name) x_JOIN(Self, x_JOIN(_, name))
+#define SelfValue x_MEMB(value)
+#define SelfRaw x_MEMB(raw)
 
 #endif // util__begin__h_
 
