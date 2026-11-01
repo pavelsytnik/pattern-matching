@@ -30,14 +30,14 @@ typedef struct Case Case;
 typedef size_t TypeId;
 typedef size_t Body;
 
-DECLARE_VEC(vec_type, Type);
-DECLARE_VEC(vec_typeid, TypeId);
-DECLARE_VEC(vec_variant, VariantConstructor);
-DECLARE_VEC(vec_ctor, Constructor);
-DECLARE_VEC(vec_pattern, Pattern);
-DECLARE_VEC(vec_column, Column);
-DECLARE_VEC(vec_row, Row);
-DECLARE_VEC(vec_case, Case);
+x_DECLARE_VEC(vec_type, Type);
+x_DECLARE_VEC(vec_typeid, TypeId);
+x_DECLARE_VEC(vec_variant, VariantConstructor);
+x_DECLARE_VEC(vec_ctor, Constructor);
+x_DECLARE_VEC(vec_pattern, Pattern);
+x_DECLARE_VEC(vec_column, Column);
+x_DECLARE_VEC(vec_row, Row);
+x_DECLARE_VEC(vec_case, Case);
 
 enum TypeKind {
     TK_BOOL,
@@ -63,7 +63,7 @@ Type ty_variant(vec_variant ctors);
 void ty_drop(Type *ty);
 
 #define DECLARED
-#define value_drop ty_drop
+#define t_value_drop ty_drop
 #define T vec_type, Type
 #include "util/vec.h"
 
@@ -80,7 +80,7 @@ VariantConstructor variant_new(const char *name, vec_typeid args);
 void variant_drop(VariantConstructor *ctor);
 
 #define DECLARED
-#define value_drop variant_drop
+#define t_value_drop variant_drop
 #define T vec_variant, VariantConstructor
 #include "util/vec.h"
 
@@ -144,8 +144,8 @@ Pattern pt_clone(Pattern pt);
 void pt_drop(Pattern *pt);
 
 #define DECLARED
-#define value_clone pt_clone
-#define value_drop pt_drop
+#define t_value_clone pt_clone
+#define t_value_drop pt_drop
 #define T vec_pattern, Pattern
 #include "util/vec.h"
 
@@ -159,8 +159,8 @@ Column column_clone(Column column);
 void column_drop(Column *col);
 
 #define DECLARED
-#define value_clone column_clone
-#define value_drop column_drop
+#define t_value_clone column_clone
+#define t_value_drop column_drop
 #define T vec_column, Column
 #include "util/vec.h"
 
@@ -173,7 +173,7 @@ Row row_new(vec_column cols, Body body);
 void row_drop(Row *row);
 
 #define DECLARED
-#define value_drop row_drop
+#define t_value_drop row_drop
 #define T vec_row, Row
 #include "util/vec.h"
 
@@ -210,7 +210,7 @@ Case case_new(Constructor ctor, Decision decision);
 void case_drop(Case *kase);
 
 #define DECLARED
-#define value_drop case_drop
+#define t_value_drop case_drop
 #define T vec_case, Case
 #include "util/vec.h"
 

@@ -325,7 +325,7 @@ static vec_ctor collect_ctors(const Compiler *compiler, const vec_row *rows, boo
 
     switch (type->kind) {
     case TK_BOOL:
-        vec_ctor_take(&ctors, MAKE(vec_ctor, {
+        vec_ctor_take(&ctors, x_MAKE(vec_ctor, {
             cs_false(),
             cs_true()
         }));
@@ -345,7 +345,7 @@ static vec_ctor collect_ctors(const Compiler *compiler, const vec_row *rows, boo
             vec_ctor_size(&ctors) < vec_variant_size(&type->variant);
         break;
     case TK_TUPLE:
-        vec_ctor_take(&ctors, MAKE(vec_ctor, { cs_tuple(type_id) }));
+        vec_ctor_take(&ctors, x_MAKE(vec_ctor, { cs_tuple(type_id) }));
         *fallback = false;
         break;
     }

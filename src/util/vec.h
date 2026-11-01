@@ -12,70 +12,70 @@
 
 #include "types.h"
 
-#define VEC_SHRUNK_SIZE_ ((size_t)-1)
+#define x_VEC_SHRUNK_SIZE_ ((size_t)-1)
 
 #endif // util__vec__h_
 
 #include "begin.h"
 
 #ifndef DECLARED
-  DEFINE_TYPE(DECLARE_VEC, Self, TValue);
+  x_DEFINE_TYPE(x_DECLARE_VEC, Self, TValue);
 #endif
 #undef DECLARED
 
 typedef TRaw SelfRaw;
 
-static inline Self MEMB(_new)(void) {
+static inline Self x_MEMB(_new)(void) {
     return (Self){0};
 }
 
-static inline Self MEMB(_with_capacity)(size_t cap) {
+static inline Self x_MEMB(_with_capacity)(size_t cap) {
     SelfValue *d = malloc(cap * sizeof(SelfValue));
     return (d) ? (Self){d, 0, cap} : (Self){0};
 }
 
-static inline Self MEMB(_move)(Self *self) {
+static inline Self x_MEMB(_move)(Self *self) {
     Self m = *self;
     memset(self, 0, sizeof(Self));
     return m;
 }
 
-static inline size_t MEMB(_size)(const Self *self) {
+static inline size_t x_MEMB(_size)(const Self *self) {
     return self->size;
 }
 
-static inline size_t MEMB(_capacity)(const Self *self) {
+static inline size_t x_MEMB(_capacity)(const Self *self) {
     return self->capacity;
 }
 
-static inline bool MEMB(_is_empty)(const Self *self) {
+static inline bool x_MEMB(_is_empty)(const Self *self) {
     return self->size == 0;
 }
 
-static inline void MEMB(_clear)(Self *self) {
+static inline void x_MEMB(_clear)(Self *self) {
     for (size_t i = 0; i < self->size; i++) {
-        value_drop(self->data + i);
+        t_value_drop(self->data + i);
     }
     self->size = 0;
 }
 
-static inline void MEMB(_drop)(Self *self) {
-    MEMB(_clear)(self);
+static inline void x_MEMB(_drop)(Self *self) {
+    x_MEMB(_clear)(self);
     free(self->data);
 
     self->capacity = 0;
     self->data = NULL;
 }
 
-static inline void MEMB(_take)(Self *self, Self unowned) {
-    MEMB(_drop)(self);
+static inline void x_MEMB(_take)(Self *self, Self unowned) {
+    x_MEMB(_drop)(self);
     *self = unowned;
 }
 
-static inline bool MEMB(_reserve)(Self *self, size_t cap) {
+static inline bool x_MEMB(_reserve)(Self *self, size_t cap) {
     if (cap <= self->capacity) return true;
 
-    size_t n = (cap == VEC_SHRUNK_SIZE_) ? self->size : cap;
+    size_t n = (cap == x_VEC_SHRUNK_SIZE_) ? self->size : cap;
 
     SelfValue *d;
     if (n == 0) {
@@ -91,33 +91,33 @@ static inline bool MEMB(_reserve)(Self *self, size_t cap) {
     return true;
 }
 
-static inline Self MEMB(_clone)(const Self *self) {
-    Self out = MEMB(_with_capacity)(self->size);
+static inline Self x_MEMB(_clone)(const Self *self) {
+    Self out = x_MEMB(_with_capacity)(self->size);
     if (out.data) {
         out.size = out.capacity;
         for (size_t i = 0; i < out.size; i++) {
-            out.data[i] = value_clone(self->data[i]);
+            out.data[i] = t_value_clone(self->data[i]);
         }
     }
     return out;
 }
 
-static inline bool MEMB(_copy)(Self *self, const Self *other) {
-    MEMB(_clear)(self);
-    if (!MEMB(_reserve)(self, other->size)) return false;
+static inline bool x_MEMB(_copy)(Self *self, const Self *other) {
+    x_MEMB(_clear)(self);
+    if (!x_MEMB(_reserve)(self, other->size)) return false;
 
     self->size = self->capacity;
     for (size_t i = 0; i < self->size; i++) {
-        self->data[i] = value_clone(other->data[i]);
+        self->data[i] = t_value_clone(other->data[i]);
     }
     return true;
 }
 
-static inline SelfValue *MEMB(_push)(Self *self, SelfValue val) {
+static inline SelfValue *x_MEMB(_push)(Self *self, SelfValue val) {
     if (self->size == self->capacity) {
         size_t n = (self->capacity == 0) ? 8 : self->capacity * 2;
 
-        if (!MEMB(_reserve)(self, n)) return NULL;
+        if (!x_MEMB(_reserve)(self, n)) return NULL;
     }
 
     SelfValue *v = self->data + self->size++;
@@ -126,50 +126,50 @@ static inline SelfValue *MEMB(_push)(Self *self, SelfValue val) {
     return v;
 }
 
-static inline SelfValue *MEMB(_emplace)(Self *self, SelfRaw raw) {
-    return MEMB(_push)(self, value_from(raw));
+static inline SelfValue *x_MEMB(_emplace)(Self *self, SelfRaw raw) {
+    return x_MEMB(_push)(self, t_value_from(raw));
 }
 
-static inline Self MEMB(_from_n)(const SelfRaw *arr, size_t n) {
-    Self out = MEMB(_with_capacity)(n);
+static inline Self x_MEMB(_from_n)(const SelfRaw *arr, size_t n) {
+    Self out = x_MEMB(_with_capacity)(n);
     if (out.data) {
         for (size_t i = 0; i < n; i++) {
-            MEMB(_push)(&out, value_from(arr[i]));
+            x_MEMB(_push)(&out, t_value_from(arr[i]));
         }
         out.size = n;
     }
     return out;
 }
 
-static inline void MEMB(_pop)(Self *self) {
+static inline void x_MEMB(_pop)(Self *self) {
     SelfValue *v = &self->data[--self->size];
-    value_drop(v);
+    t_value_drop(v);
 }
 
-static inline void MEMB(_erase_n)(Self *self, size_t idx, size_t len) {
+static inline void x_MEMB(_erase_n)(Self *self, size_t idx, size_t len) {
     SelfValue *d = self->data + idx;
     SelfValue *p = d;
     SelfValue *end = self->data + self->size;
 
     for (size_t i = 0; i < len; i++) {
-        value_drop(p++);
+        t_value_drop(p++);
     }
 
     memmove(d, p, (end - p) * sizeof(*self->data));
     self->size -= len;
 }
 
-static inline void MEMB(_shrink_to_fit)(Self *self) {
-    MEMB(_reserve)(self, VEC_SHRUNK_SIZE_);
+static inline void x_MEMB(_shrink_to_fit)(Self *self) {
+    x_MEMB(_reserve)(self, x_VEC_SHRUNK_SIZE_);
 }
 
-static inline bool MEMB(_insert_uninit_)(Self *self, size_t idx, size_t n) {
+static inline bool x_MEMB(_insert_uninit_)(Self *self, size_t idx, size_t n) {
     if (self->size + n > self->capacity) {
         size_t standard_cap = (self->capacity == 0) ? 8 : self->capacity * 2;
         size_t min_req_cap = self->size + n;
         size_t cap = (standard_cap > min_req_cap) ? standard_cap : min_req_cap;
 
-        if (!MEMB(_reserve)(self, cap)) return false;
+        if (!x_MEMB(_reserve)(self, cap)) return false;
     }
 
     SelfValue *pos = self->data + idx;
@@ -180,27 +180,27 @@ static inline bool MEMB(_insert_uninit_)(Self *self, size_t idx, size_t n) {
     return true;
 }
 
-static inline bool MEMB(_insert_n)(Self *self, size_t idx, const SelfValue *arr, size_t n) {
-    if (!MEMB(_insert_uninit_)(self, idx, n)) return false;
+static inline bool x_MEMB(_insert_n)(Self *self, size_t idx, const SelfValue *arr, size_t n) {
+    if (!x_MEMB(_insert_uninit_)(self, idx, n)) return false;
 
     memcpy(self->data + idx, arr, n * sizeof(SelfValue));
     return true;
 }
 
-static inline bool MEMB(_emplace_n)(Self *self, size_t idx, const SelfRaw *arr, size_t n) {
-    if (!MEMB(_insert_uninit_)(self, idx, n)) return false;
+static inline bool x_MEMB(_emplace_n)(Self *self, size_t idx, const SelfRaw *arr, size_t n) {
+    if (!x_MEMB(_insert_uninit_)(self, idx, n)) return false;
 
     for (SelfValue *p = self->data + idx; n--; p++, arr++) {
-        *p = value_from(*arr);
+        *p = t_value_from(*arr);
     }
     return true;
 }
 
-static inline const SelfValue *MEMB(_at)(const Self *self, size_t idx) {
+static inline const SelfValue *x_MEMB(_at)(const Self *self, size_t idx) {
     return self->data + idx;
 }
 
-static inline SelfValue *MEMB(_at_mut)(Self *self, size_t idx) {
+static inline SelfValue *x_MEMB(_at_mut)(Self *self, size_t idx) {
     return self->data + idx;
 }
 

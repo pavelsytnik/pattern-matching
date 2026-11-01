@@ -26,9 +26,9 @@ static void str_free(char **str) {
     s_str_freed_count++;
 }
 
-#define value_drop str_free
-#define value_from str
-#define value_clone str
+#define t_value_drop str_free
+#define t_value_from str
+#define t_value_clone str
 #define T vec_str, char *
 #include <util/vec.h>
 
@@ -110,7 +110,7 @@ static void test_vec_str(void) {
     assert(vec_str_capacity(&v) == 0);
 
     // Vector from an array
-    vec_str_take(&v, MAKE(vec_str, { "1", "2", "3" }));
+    vec_str_take(&v, x_MAKE(vec_str, { "1", "2", "3" }));
 
     assert(vec_str_size(&v) == 3);
     assert(vec_str_capacity(&v) == 3);

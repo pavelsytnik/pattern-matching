@@ -8,34 +8,34 @@
 
 #include "common.h"
 
-#define DEFINE_TYPE(MACRO, SELF, ...) MACRO(SELF, __VA_ARGS__)
-#define MEMB(name) JOIN(Self, name)
-#define SelfValue MEMB(_value)
-#define SelfRaw MEMB(_raw)
+#define x_DEFINE_TYPE(MACRO, SELF, ...) MACRO(SELF, __VA_ARGS__)
+#define x_MEMB(name) x_JOIN(Self, name)
+#define SelfValue x_MEMB(_value)
+#define SelfRaw x_MEMB(_raw)
 
 #endif // util__begin__h_
 
 #ifndef T
   #error "T is undefined"
-#elif ARGS_NUM(T) != 2
+#elif x_ARGS_NUM(T) != 2
   #error "T must have exactly two arguments"
 #endif
 
-#define Self ARG(1, T)
-#define TValue ARG(2, T)
+#define Self x_ARG(1, T)
+#define TValue x_ARG(2, T)
 
 #ifndef TRaw
   #define TRaw TValue
 #endif
 
-#ifndef value_from
-  #define value_from(v) (v)
+#ifndef t_value_from
+  #define t_value_from(v) (v)
 #endif
 
-#ifndef value_clone
-  #define value_clone(v) (v)
+#ifndef t_value_clone
+  #define t_value_clone(v) (v)
 #endif
 
-#ifndef value_drop
-  #define value_drop(vp) ((void)(vp))
+#ifndef t_value_drop
+  #define t_value_drop(vp) ((void)(vp))
 #endif

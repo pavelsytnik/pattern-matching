@@ -7,14 +7,14 @@ static void test_int(void) {
     Compiler c = compiler_new();
     TypeId i = new_type(&c, ty_int());
 
-    Decision d = compile(&c, MAKE(vec_row, {
-        row_new(MAKE(vec_column, {
+    Decision d = compile(&c, x_MAKE(vec_row, {
+        row_new(x_MAKE(vec_column, {
             column_new(i, pt_int(666))
         }), 11),
-        row_new(MAKE(vec_column, {
+        row_new(x_MAKE(vec_column, {
             column_new(i, pt_int(999))
         }), 22),
-        row_new(MAKE(vec_column, {
+        row_new(x_MAKE(vec_column, {
             column_new(i, pt_wildcard())
         }), 33)
     }));
@@ -40,17 +40,17 @@ static void test_option_int(void) {
     Compiler c = compiler_new();
 
     TypeId i = new_type(&c, ty_int());
-    TypeId v = new_type(&c, ty_variant(MAKE(vec_variant, {
-        variant_new("Some", MAKE(vec_typeid, { i })),
+    TypeId v = new_type(&c, ty_variant(x_MAKE(vec_variant, {
+        variant_new("Some", x_MAKE(vec_typeid, { i })),
         variant_new("None", vec_typeid_new())
     })));
 
-    Decision d = compile(&c, MAKE(vec_row, {
-        row_new(MAKE(vec_column, {
+    Decision d = compile(&c, x_MAKE(vec_row, {
+        row_new(x_MAKE(vec_column, {
             column_new(v, pt_variant(v, 1, vec_pattern_new()))
         }), 987),
-        row_new(MAKE(vec_column, {
-            column_new(v, pt_variant(v, 0, MAKE(vec_pattern, {
+        row_new(x_MAKE(vec_column, {
+            column_new(v, pt_variant(v, 0, x_MAKE(vec_pattern, {
                 pt_int(888)
             })))
         }), 123)
