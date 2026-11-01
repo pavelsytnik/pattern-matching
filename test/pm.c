@@ -41,8 +41,8 @@ static void test_option_int(void) {
 
     TypeId i = new_type(&c, ty_int());
     TypeId v = new_type(&c, ty_variant(MAKE(vec_variant, {
-        { "Some", MAKE(vec_typeid, { i }) },
-        { "None", vec_typeid_new() }
+        variant_new("Some", MAKE(vec_typeid, { i })),
+        variant_new("None", vec_typeid_new())
     })));
 
     Decision d = compile(&c, MAKE(vec_row, {

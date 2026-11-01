@@ -76,11 +76,10 @@ struct VariantConstructor {
     vec_typeid args;
 };
 
-VariantConstructor variant_from(VariantConstructor ctor);
+VariantConstructor variant_new(const char *name, vec_typeid args);
 void variant_drop(VariantConstructor *ctor);
 
 #define DECLARED
-#define value_from variant_from
 #define value_drop variant_drop
 #define T vec_variant, VariantConstructor
 #include "util/vec.h"

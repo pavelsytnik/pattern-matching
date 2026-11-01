@@ -56,10 +56,10 @@ static char *copy_string(const char *s) {
     return cp;
 }
 
-VariantConstructor variant_from(VariantConstructor ctor) {
+VariantConstructor variant_new(const char *name, vec_typeid args) {
     return (VariantConstructor){
-        .name = copy_string(ctor.name),
-        .args = vec_typeid_move(&ctor.args)
+        .name = copy_string(name),
+        .args = args
     };
 }
 
