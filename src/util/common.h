@@ -6,17 +6,15 @@
 #ifndef util__common__h_
 #define util__common__h_
 
-#define EXPAND(X) X
-
 #define JOIN(a, b) JOIN_(a, b)
 #define JOIN_(a, b) a##b
 
 #define ARGS_NUM(...) ARGS_NUM_(__VA_ARGS__, RSEQ_)
-#define ARGS_NUM_(...) EXPAND(ARG_N_(__VA_ARGS__))
+#define ARGS_NUM_(...) ARG_N_(__VA_ARGS__)
 #define RSEQ_ 8, 7, 6, 5, 4, 3, 2, 1
 #define ARG_N_(_1, _2, _3, _4, _5, _6, _7, _8, N, ...) N
 
-#define ARG(N, ...) EXPAND(ARG_##N##_(__VA_ARGS__))
+#define ARG(N, ...) ARG_##N##_(__VA_ARGS__)
 #define ARG_1_(_1, ...) _1
 #define ARG_2_(_1, _2, ...) _2
 #define ARG_3_(_1, _2, _3, ...) _3

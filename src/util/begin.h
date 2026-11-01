@@ -8,7 +8,7 @@
 
 #include "common.h"
 
-#define DEFINE_TYPE(MACRO, SELF, ...) EXPAND(MACRO(SELF, __VA_ARGS__))
+#define DEFINE_TYPE(MACRO, SELF, ...) MACRO(SELF, __VA_ARGS__)
 #define MEMB(name) JOIN(Self, name)
 #define SelfValue MEMB(_value)
 #define SelfRaw MEMB(_raw)

@@ -18,6 +18,12 @@ set_target_properties(pm PROPERTIES
     C_EXTENSIONS OFF
 )
 
+if(MSVC)
+    target_compile_options(pm PUBLIC
+        /Zc:preprocessor
+    )
+endif()
+
 function(add_pm_test name)
     add_executable("test-${name}"
         "${name}.c"
