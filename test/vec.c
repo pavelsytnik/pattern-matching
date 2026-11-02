@@ -110,7 +110,7 @@ static void test_vec_str(void) {
     assert(vec_str_capacity(&v) == 0);
 
     // Vector from an array
-    vec_str_take(&v, x_MAKE(vec_str, { "1", "2", "3" }));
+    vec_str_take(&v, x_make(vec_str, { "1", "2", "3" }));
 
     assert(vec_str_size(&v) == 3);
     assert(vec_str_capacity(&v) == 3);

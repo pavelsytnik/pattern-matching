@@ -19,7 +19,7 @@
 #include "begin.h"
 
 #ifndef DECLARED
-  x_DEFINE_TYPE(x_DECLARE_VEC, Self, TValue);
+  x_DEFINE_TYPE(x_declare_vec, Self, TValue);
 #endif
 #undef DECLARED
 

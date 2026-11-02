@@ -30,14 +30,14 @@ typedef struct Case Case;
 typedef size_t TypeId;
 typedef size_t Body;
 
-x_DECLARE_VEC(vec_type, Type);
-x_DECLARE_VEC(vec_typeid, TypeId);
-x_DECLARE_VEC(vec_variant, VariantConstructor);
-x_DECLARE_VEC(vec_ctor, Constructor);
-x_DECLARE_VEC(vec_pattern, Pattern);
-x_DECLARE_VEC(vec_column, Column);
-x_DECLARE_VEC(vec_row, Row);
-x_DECLARE_VEC(vec_case, Case);
+x_declare_vec(vec_type, Type);
+x_declare_vec(vec_typeid, TypeId);
+x_declare_vec(vec_variant, VariantConstructor);
+x_declare_vec(vec_ctor, Constructor);
+x_declare_vec(vec_pattern, Pattern);
+x_declare_vec(vec_column, Column);
+x_declare_vec(vec_row, Row);
+x_declare_vec(vec_case, Case);
 
 enum TypeKind {
     TK_BOOL,

@@ -24,13 +24,13 @@
 #define x_ARG_7_(_1, _2, _3, _4, _5, _6, _7, ...) _7
 #define x_ARG_8_(_1, _2, _3, _4, _5, _6, _7, _8, ...) _8
 
-#define x_MAKE_ARRAY(T, ...) ((T [])__VA_ARGS__)
-#define x_LITERAL_COUNT(T, ...) (sizeof((T [])__VA_ARGS__) / sizeof(T))
+#define x_make_array(T, ...) ((T [])__VA_ARGS__)
+#define x_literal_count(T, ...) (sizeof((T [])__VA_ARGS__) / sizeof(T))
 
-#define x_MAKE(C, ...)                        \
+#define x_make(C, ...)                        \
     C##_from_n(                               \
-        x_MAKE_ARRAY(C##_raw, __VA_ARGS__),   \
-        x_LITERAL_COUNT(C##_raw, __VA_ARGS__) \
+        x_make_array(C##_raw, __VA_ARGS__),   \
+        x_literal_count(C##_raw, __VA_ARGS__) \
     )
 
 #endif // util__common__h_

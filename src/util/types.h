@@ -6,7 +6,7 @@
 #ifndef util__types__h_
 #define util__types__h_
 
-#define x_DECLARE_VEC(SELF, TYPE) \
+#define x_declare_vec(SELF, TYPE) \
     typedef TYPE SELF##_value;    \
     typedef struct SELF {         \
         SELF##_value *data;       \
