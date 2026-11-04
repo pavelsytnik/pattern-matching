@@ -24,6 +24,9 @@
 #define x_ARG_7_(_1, _2, _3, _4, _5, _6, _7, ...) _7
 #define x_ARG_8_(_1, _2, _3, _4, _5, _6, _7, _8, ...) _8
 
+#define x_default_clone(v) (v)
+#define x_default_drop(vp) ((void)(vp))
+
 #define x_make_array(T, ...) ((T [])__VA_ARGS__)
 #define x_literal_count(T, ...) (sizeof((T [])__VA_ARGS__) / sizeof(T))
 

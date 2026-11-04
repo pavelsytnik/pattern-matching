@@ -29,13 +29,13 @@
 #endif
 
 #ifndef t_value_from
-  #define t_value_from(v) (v)
+  #define t_value_from(v) x_default_clone(v)
 #endif
 
 #ifndef t_value_clone
-  #define t_value_clone(v) (v)
+  #define t_value_clone(v) x_default_clone(v)
 #endif
 
 #ifndef t_value_drop
-  #define t_value_drop(vp) ((void)(vp))
+  #define t_value_drop(vp) x_default_drop(vp)
 #endif
