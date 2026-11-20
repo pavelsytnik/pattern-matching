@@ -9,6 +9,6 @@
 #undef TRaw
 #undef TValue
 #undef TTag
-#undef TPrefix
+#undef TPrefix_
 #undef Self
 #undef T

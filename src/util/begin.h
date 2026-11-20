@@ -8,10 +8,10 @@
 
 #include "common.h"
 
-#define x_DEFINE_TYPE(MACRO, SELF, ...) MACRO(SELF, __VA_ARGS__)
-#define x_MEMB(name) x_JOIN(Self, x_JOIN(_, name))
-#define SelfValue x_MEMB(value)
-#define SelfRaw x_MEMB(raw)
+#define x_DEFINE_TYPE_(MACRO, SELF, ...) MACRO(SELF, __VA_ARGS__)
+#define x_MEMB_(name) x_JOIN(Self, x_JOIN(_, name))
+#define SelfValue x_MEMB_(value)
+#define SelfRaw x_MEMB_(raw)
 
 #endif // util__begin__h_
 
@@ -23,7 +23,7 @@
     #error "No TTag defined"
   #endif
 
-  #define Self x_JOIN(TPrefix, x_JOIN(_, TTag))
+  #define Self x_JOIN(TPrefix_, x_JOIN(_, TTag))
   #ifdef T
     #define TValue T
   #endif
