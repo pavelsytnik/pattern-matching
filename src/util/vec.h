@@ -16,6 +16,9 @@
 
 #endif // util__vec__h_
 
+#ifndef TPrefix
+  #define TPrefix vec
+#endif
 #include "begin.h"
 
 #ifndef DECLARED

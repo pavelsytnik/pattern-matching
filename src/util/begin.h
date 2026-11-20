@@ -15,14 +15,23 @@
 
 #endif // util__begin__h_
 
-#ifndef T
-  #error "T is undefined"
-#elif x_ARGS_NUM(T) != 2
-  #error "T must have exactly two arguments"
+#if defined T && x_ARGS_NUM(T) > 1
+  #define Self x_ARG(1, T)
+  #define TValue x_ARG(2, T)
+#else
+  #ifndef TTag
+    #error "No TTag defined"
+  #endif
+
+  #define Self x_JOIN(TPrefix, x_JOIN(_, TTag))
+  #ifdef T
+    #define TValue T
+  #endif
 #endif
 
-#define Self x_ARG(1, T)
-#define TValue x_ARG(2, T)
+#ifndef TValue
+  #error "No TValue defined"
+#endif
 
 #ifndef TRaw
   #define TRaw TValue

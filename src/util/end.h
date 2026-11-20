@@ -8,5 +8,7 @@
 #undef t_value_from
 #undef TRaw
 #undef TValue
+#undef TTag
+#undef TPrefix
 #undef Self
 #undef T
