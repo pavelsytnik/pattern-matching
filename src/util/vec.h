@@ -19,7 +19,7 @@
 #ifndef t_prefix_
   #define t_prefix_ vec
 #endif
-#include "begin.h"
+#include "priv/template_begin.h"
 
 #ifndef DECLARED
   x_DEFINE_TYPE_(x_declare_vec, t_self, t_value);
@@ -207,4 +207,4 @@ static inline x_m_value_ *x_MEMB_(at_mut)(t_self *self, size_t idx) {
     return self->data + idx;
 }
 
-#include "end.h"
+#include "priv/template_end.h"

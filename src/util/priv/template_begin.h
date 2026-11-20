@@ -3,8 +3,8 @@
  * Licensed under the MIT License. See LICENSE for license information.  *
  * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 
-#ifndef util__begin__h_
-#define util__begin__h_
+#ifndef util__priv__template_begin__h_
+#define util__priv__template_begin__h_
 
 #include "common.h"
 
@@ -13,7 +13,7 @@
 #define x_m_value_ x_MEMB_(value)
 #define x_m_raw_ x_MEMB_(raw)
 
-#endif // util__begin__h_
+#endif // util__priv__template_begin__h_
 
 #if defined T && x_ARGS_NUM(T) > 1
   #define t_self x_ARG(1, T)

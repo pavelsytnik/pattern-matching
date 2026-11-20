@@ -1,8 +1,8 @@
 add_library(pm STATIC
     ${PROJECT_SOURCE_DIR}/src/pm.h
     ${PROJECT_SOURCE_DIR}/src/pm.c
-    ${PROJECT_SOURCE_DIR}/src/util/begin.h
-    ${PROJECT_SOURCE_DIR}/src/util/end.h
+    ${PROJECT_SOURCE_DIR}/src/util/priv/template_begin.h
+    ${PROJECT_SOURCE_DIR}/src/util/priv/template_end.h
     ${PROJECT_SOURCE_DIR}/src/util/common.h
     ${PROJECT_SOURCE_DIR}/src/util/types.h
     ${PROJECT_SOURCE_DIR}/src/util/vec.h
