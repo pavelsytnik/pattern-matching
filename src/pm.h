@@ -153,7 +153,6 @@ Column column_new(TypeId ty, Pattern pt);
 Column column_clone(Column column);
 void column_drop(Column *col);
 
-#define t_value_clone column_clone
 #define t_value_drop column_drop
 #define T vec_column, Column, (x_declared)
 #include "util/vec.h"

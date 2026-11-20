@@ -399,7 +399,7 @@ static vec_row specialize_rows(const Compiler *compiler, const vec_row *rows, Co
 
         for (size_t j = 1; j < vec_column_size(&row->columns); j++) {
             const Column *col = vec_column_at(&row->columns, j);
-            vec_column_push(&cols, column_new(col->type, pt_clone(col->pattern)));
+            vec_column_push(&cols, column_clone(*col));
         }
 
         vec_row_push(&s, row_new(vec_column_move(&cols), row->body));
@@ -423,7 +423,7 @@ static vec_row fallback_rows(const Compiler *compiler, const vec_row *rows) {
 
         for (size_t j = 1; j < vec_column_size(&row->columns); j++) {
             const Column *col = vec_column_at(&row->columns, j);
-            vec_column_push(&cols, column_new(col->type, pt_clone(col->pattern)));
+            vec_column_push(&cols, column_clone(*col));
         }
 
         vec_row_push(&d, row_new(vec_column_move(&cols), row->body));
