@@ -13,11 +13,17 @@
 #define x_m_value_ x_MEMB_(value)
 #define x_m_raw_ x_MEMB_(raw)
 
+#define x_HAS_TRAIT_(flag) ((t_traits) & (flag))
+#define x_declared (1u << 0)
+
 #endif // util__priv__template_begin__h_
 
 #if defined T && x_ARGS_NUM(T) > 1
   #define t_self x_ARG(1, T)
   #define t_value x_ARG(2, T)
+  #if x_ARGS_NUM(T) >= 3
+    #define t_traits x_ARG(3, T)
+  #endif
 #else
   #ifndef t_tag
     #error "No t_tag defined"
@@ -31,6 +37,14 @@
 
 #ifndef t_value
   #error "No t_value defined"
+#endif
+
+#ifndef t_traits
+  #define t_traits 0u
+#endif
+
+#if x_HAS_TRAIT_(x_declared)
+  #define t_declared
 #endif
 
 #ifndef t_raw

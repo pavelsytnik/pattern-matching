@@ -21,10 +21,9 @@
 #endif
 #include "priv/template_begin.h"
 
-#ifndef DECLARED
+#ifndef t_declared
   x_DEFINE_TYPE_(x_declare_vec, t_self, t_value);
 #endif
-#undef DECLARED
 
 typedef t_raw x_m_raw_;
 

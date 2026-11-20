@@ -62,13 +62,11 @@ Type ty_variant(vec_variant ctors);
 
 void ty_drop(Type *ty);
 
-#define DECLARED
 #define t_value_drop ty_drop
-#define T vec_type, Type
+#define T vec_type, Type, (x_declared)
 #include "util/vec.h"
 
-#define DECLARED
-#define T vec_typeid, TypeId
+#define T vec_typeid, TypeId, (x_declared)
 #include "util/vec.h"
 
 struct VariantConstructor {
@@ -79,9 +77,8 @@ struct VariantConstructor {
 VariantConstructor variant_new(const char *name, vec_typeid args);
 void variant_drop(VariantConstructor *ctor);
 
-#define DECLARED
 #define t_value_drop variant_drop
-#define T vec_variant, VariantConstructor
+#define T vec_variant, VariantConstructor, (x_declared)
 #include "util/vec.h"
 
 enum ConstructorKind {
@@ -113,8 +110,7 @@ Constructor cs_variant(TypeId ty, size_t ctor_idx);
 
 bool cs_eq(const Constructor *c1, const Constructor *c2);
 
-#define DECLARED
-#define T vec_ctor, Constructor
+#define T vec_ctor, Constructor, (x_declared)
 #include "util/vec.h"
 
 enum PatternKind {
@@ -143,10 +139,9 @@ Pattern pt_wildcard(void);
 Pattern pt_clone(Pattern pt);
 void pt_drop(Pattern *pt);
 
-#define DECLARED
 #define t_value_clone pt_clone
 #define t_value_drop pt_drop
-#define T vec_pattern, Pattern
+#define T vec_pattern, Pattern, (x_declared)
 #include "util/vec.h"
 
 struct Column {
@@ -158,10 +153,9 @@ Column column_new(TypeId ty, Pattern pt);
 Column column_clone(Column column);
 void column_drop(Column *col);
 
-#define DECLARED
 #define t_value_clone column_clone
 #define t_value_drop column_drop
-#define T vec_column, Column
+#define T vec_column, Column, (x_declared)
 #include "util/vec.h"
 
 struct Row {
@@ -172,9 +166,8 @@ struct Row {
 Row row_new(vec_column cols, Body body);
 void row_drop(Row *row);
 
-#define DECLARED
 #define t_value_drop row_drop
-#define T vec_row, Row
+#define T vec_row, Row, (x_declared)
 #include "util/vec.h"
 
 enum DecisionKind {
@@ -209,9 +202,8 @@ struct Case {
 Case case_new(Constructor ctor, Decision decision);
 void case_drop(Case *kase);
 
-#define DECLARED
 #define t_value_drop case_drop
-#define T vec_case, Case
+#define T vec_case, Case, (x_declared)
 #include "util/vec.h"
 
 struct Compiler {

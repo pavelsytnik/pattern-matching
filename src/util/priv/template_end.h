@@ -10,5 +10,7 @@
 #undef t_value
 #undef t_tag
 #undef t_prefix_
+#undef t_declared
+#undef t_traits
 #undef t_self
 #undef T
