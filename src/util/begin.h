@@ -9,32 +9,32 @@
 #include "common.h"
 
 #define x_DEFINE_TYPE_(MACRO, SELF, ...) MACRO(SELF, __VA_ARGS__)
-#define x_MEMB_(name) x_JOIN(Self, x_JOIN(_, name))
-#define SelfValue x_MEMB_(value)
-#define SelfRaw x_MEMB_(raw)
+#define x_MEMB_(name) x_JOIN(t_self, x_JOIN(_, name))
+#define x_m_value_ x_MEMB_(value)
+#define x_m_raw_ x_MEMB_(raw)
 
 #endif // util__begin__h_
 
 #if defined T && x_ARGS_NUM(T) > 1
-  #define Self x_ARG(1, T)
-  #define TValue x_ARG(2, T)
+  #define t_self x_ARG(1, T)
+  #define t_value x_ARG(2, T)
 #else
-  #ifndef TTag
-    #error "No TTag defined"
+  #ifndef t_tag
+    #error "No t_tag defined"
   #endif
 
-  #define Self x_JOIN(TPrefix_, x_JOIN(_, TTag))
+  #define t_self x_JOIN(t_prefix_, x_JOIN(_, t_tag))
   #ifdef T
-    #define TValue T
+    #define t_value T
   #endif
 #endif
 
-#ifndef TValue
-  #error "No TValue defined"
+#ifndef t_value
+  #error "No t_value defined"
 #endif
 
-#ifndef TRaw
-  #define TRaw TValue
+#ifndef t_raw
+  #define t_raw t_value
 #endif
 
 #ifndef t_value_from

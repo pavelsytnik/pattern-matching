@@ -6,9 +6,9 @@
 #undef t_value_drop
 #undef t_value_clone
 #undef t_value_from
-#undef TRaw
-#undef TValue
-#undef TTag
-#undef TPrefix_
-#undef Self
+#undef t_raw
+#undef t_value
+#undef t_tag
+#undef t_prefix_
+#undef t_self
 #undef T
