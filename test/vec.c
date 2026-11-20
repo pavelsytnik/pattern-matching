@@ -29,7 +29,7 @@ static void str_free(char **str) {
 #define t_value_drop str_free
 #define t_value_from str
 #define t_value_clone str
-#define T vec_str, char *
+#define T vec_str, char *, (x_use_clone)
 #include <util/vec.h>
 
 static void test_vec_str(void) {

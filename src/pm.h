@@ -141,7 +141,7 @@ void pt_drop(Pattern *pt);
 
 #define t_value_clone pt_clone
 #define t_value_drop pt_drop
-#define T vec_pattern, Pattern, (x_declared)
+#define T vec_pattern, Pattern, (x_declared | x_use_clone)
 #include "util/vec.h"
 
 struct Column {

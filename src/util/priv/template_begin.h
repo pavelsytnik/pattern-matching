@@ -14,7 +14,8 @@
 #define x_m_raw_ x_MEMB_(raw)
 
 #define x_HAS_TRAIT_(flag) ((t_traits) & (flag))
-#define x_declared (1u << 0)
+#define x_declared  (1u << 0)
+#define x_use_clone (1u << 1)
 
 #endif // util__priv__template_begin__h_
 
@@ -45,6 +46,9 @@
 
 #if x_HAS_TRAIT_(x_declared)
   #define t_declared
+#endif
+#if x_HAS_TRAIT_(x_use_clone)
+  #define t_use_clone
 #endif
 
 #ifndef t_raw

@@ -93,6 +93,8 @@ static inline bool x_MEMB_(reserve)(t_self *self, size_t cap) {
     return true;
 }
 
+#ifdef t_use_clone
+
 static inline t_self x_MEMB_(clone)(const t_self *self) {
     t_self out = x_MEMB_(with_capacity)(self->size);
     if (out.data) {
@@ -114,6 +116,8 @@ static inline bool x_MEMB_(copy)(t_self *self, const t_self *other) {
     }
     return true;
 }
+
+#endif // t_use_clone
 
 static inline x_m_value_ *x_MEMB_(push)(t_self *self, x_m_value_ val) {
     if (self->size == self->capacity) {
