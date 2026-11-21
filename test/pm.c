@@ -62,7 +62,6 @@ static void test_option_int(void) {
 
     {
         const vec_case *v_cases = &d.branch.cases;
-        const Decision *v_fallback = d.branch.fallback;
         const Case *v_some = vec_case_at(v_cases, 1);
         const Case *v_none = vec_case_at(v_cases, 0);
 

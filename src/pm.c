@@ -409,6 +409,8 @@ static vec_row specialize_rows(const Compiler *compiler, const vec_row *rows, Co
 }
 
 static vec_row fallback_rows(const Compiler *compiler, const vec_row *rows) {
+    (void)compiler;
+
     vec_row d = vec_row_new();
 
     for (size_t i = 0; i < vec_row_size(rows); i++) {
