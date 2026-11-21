@@ -132,9 +132,13 @@ static inline x_m_value_ *x_MEMB_(push)(t_self *self, x_m_value_ val) {
     return v;
 }
 
+#ifndef t_no_emplace_
+
 static inline x_m_value_ *x_MEMB_(emplace)(t_self *self, x_m_raw_ raw) {
     return x_MEMB_(push)(self, t_value_from(raw));
 }
+
+#endif // !t_no_emplace_
 
 static inline t_self x_MEMB_(from_n)(const x_m_raw_ *arr, size_t n) {
     t_self out = x_MEMB_(with_capacity)(n);
@@ -193,6 +197,8 @@ static inline bool x_MEMB_(insert_n)(t_self *self, size_t idx, const x_m_value_ 
     return true;
 }
 
+#ifndef t_no_emplace_
+
 static inline bool x_MEMB_(emplace_n)(t_self *self, size_t idx, const x_m_raw_ *arr, size_t n) {
     if (!x_MEMB_(insert_uninit_)(self, idx, n)) return false;
 
@@ -201,6 +207,8 @@ static inline bool x_MEMB_(emplace_n)(t_self *self, size_t idx, const x_m_raw_ *
     }
     return true;
 }
+
+#endif // !t_no_emplace_
 
 static inline const x_m_value_ *x_MEMB_(at)(const t_self *self, size_t idx) {
     return self->data + idx;

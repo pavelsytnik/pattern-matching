@@ -55,8 +55,12 @@
   #define t_raw t_value
 #endif
 
+#define t_no_emplace_
+
 #ifndef t_value_from
   #define t_value_from(v) x_default_clone(v)
+#else
+  #undef t_no_emplace_
 #endif
 
 #ifndef t_value_clone
