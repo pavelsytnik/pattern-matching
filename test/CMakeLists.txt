@@ -21,6 +21,8 @@ set_target_properties(pm PROPERTIES
 if(MSVC)
     target_compile_options(pm PUBLIC
         /Zc:preprocessor
+        /W4
+        /wd4201 # Allow nameless structs/unions
     )
 endif()
 
